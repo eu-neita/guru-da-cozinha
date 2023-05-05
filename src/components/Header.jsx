@@ -1,8 +1,10 @@
+import { Link, useLocation } from 'react-router-dom';
 import pofileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 
 function Header() {
-  return (
+  const { pathname } = useLocation();
+  const sameHTML = (
     <div>
       <img
         src={ pofileIcon }
@@ -16,6 +18,34 @@ function Header() {
       />
     </div>
   );
+  const renderConditionals = () => {
+    switch (pathname) {
+    case '/':
+    case '/meals/:id-da-receita':
+    case '/drinks/:id-da-receita':
+    case '/drinks/:id-da-receita/in-progress':
+    case '/meals/:id-da-receita/in-progress':
+      return sameHTML;
+    default:
+      return (
+        <div>
+          <h1>{pathname}</h1>
+          <img
+            src={ pofileIcon }
+            alt="profile icon"
+            data-testid="profile-top-btn"
+          />
+          <img
+            src={ searchIcon }
+            alt="search icon"
+            data-testid="search-top-btn"
+          />
+        </div>
+      );
+    }
+  };
+
+  return <div>{renderConditionals()}</div>;
 }
 
 export default Header;
