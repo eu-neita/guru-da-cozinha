@@ -26,6 +26,23 @@ function Header() {
     case '/drinks/:id-da-receita/in-progress':
     case '/meals/:id-da-receita/in-progress':
       return sameHTML;
+    case '/profile':
+    case '/done-recipes':
+    case '/favorite-recipes':
+      return (
+        <div>
+          <h1>
+            {pathname === '/profile' && 'Profile'}
+            {pathname === '/done-recipes' && 'Done Recipes'}
+            {pathname === '/favorite-recipes' && 'Favorite Recipes'}
+          </h1>
+          <img
+            src={ pofileIcon }
+            alt="profile icon"
+            data-testid="profile-top-btn"
+          />
+        </div>
+      );
     default:
       return (
         <div>
