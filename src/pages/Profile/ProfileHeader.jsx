@@ -3,7 +3,7 @@ import pofileIcon from '../../images/profileIcon.svg';
 function ProfileHeader() {
   return (
     <div>
-      <h1>Profile</h1>
+      <h1 data-testid="page-title">Profile</h1>
       <img
         src={ pofileIcon }
         alt="profile icon"

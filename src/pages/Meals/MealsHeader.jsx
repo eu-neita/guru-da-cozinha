@@ -4,7 +4,7 @@ import searchIcon from '../../images/searchIcon.svg';
 function MealsHeader() {
   return (
     <div>
-      <h1>Meals</h1>
+      <h1 data-testid="page-title">Meals</h1>
       <img
         src={ pofileIcon }
         alt="profile icon"
