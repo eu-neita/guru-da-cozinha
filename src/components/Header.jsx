@@ -1,68 +1,35 @@
-import { Link, useLocation } from 'react-router-dom';
-import pofileIcon from '../images/profileIcon.svg';
-import searchIcon from '../images/searchIcon.svg';
+import { useLocation } from 'react-router-dom';
+import HomeHeader from '../pages/Home/HomeHeader';
+import MealsHeader from '../pages/Meals/MealsHeader';
+import DrinksHeader from '../pages/Drinks/DrinksHeader';
+import ProfileHeader from '../pages/Profile/ProfileHeader';
+import DoneRecipesHeader from '../pages/DoneRecipes/DoneRecipesHeader';
+import FavoriteRecipesHeader from '../pages/FavoriteRecipes/FavoriteRecipesHeader';
 
 function Header() {
   const { pathname } = useLocation();
-  const sameHTML = (
-    <div>
-      <img
-        src={ pofileIcon }
-        alt="profile icon"
-        data-testid="profile-top-btn"
-      />
-      <img
-        src={ searchIcon }
-        alt="search icon"
-        data-testid="search-top-btn"
-      />
-    </div>
-  );
-  const renderConditionals = () => {
-    switch (pathname) {
-    case '/':
-    case '/meals/:id-da-receita':
-    case '/drinks/:id-da-receita':
-    case '/drinks/:id-da-receita/in-progress':
-    case '/meals/:id-da-receita/in-progress':
-      return sameHTML;
-    case '/profile':
-    case '/done-recipes':
-    case '/favorite-recipes':
-      return (
-        <div>
-          <h1>
-            {pathname === '/profile' && 'Profile'}
-            {pathname === '/done-recipes' && 'Done Recipes'}
-            {pathname === '/favorite-recipes' && 'Favorite Recipes'}
-          </h1>
-          <img
-            src={ pofileIcon }
-            alt="profile icon"
-            data-testid="profile-top-btn"
-          />
-        </div>
-      );
-    default:
-      return (
-        <div>
-          <h1>{pathname}</h1>
-          <img
-            src={ pofileIcon }
-            alt="profile icon"
-            data-testid="profile-top-btn"
-          />
-          <img
-            src={ searchIcon }
-            alt="search icon"
-            data-testid="search-top-btn"
-          />
-        </div>
-      );
-    }
-  };
+  // se for algo que contenha id da receita ou inprogress ele usa o mesmo componente do home
+  const onIncludes = pathname.includes(':id-da-receita')
+      || pathname.includes('in-progress');
 
-  return <div>{renderConditionals()}</div>;
+  if (onIncludes) return <HomeHeader />;
+  // para todos os casos de rota renderiza um header diferente
+  switch (pathname) {
+  case '/':
+    return <HomeHeader />;
+  case '/meals':
+    return <MealsHeader />;
+  case '/drinks':
+    return <DrinksHeader />;
+  case '/profile':
+    return <ProfileHeader />;
+  case '/done-recipes':
+    return <DoneRecipesHeader />;
+  case '/favorite-recipes':
+    return <FavoriteRecipesHeader />;
+  default:
+    return null;
+  }
 }
 
 export default Header;
