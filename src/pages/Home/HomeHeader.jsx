@@ -1,14 +1,18 @@
+import { useHistory } from 'react-router-dom';
 import pofileIcon from '../../images/profileIcon.svg';
 import searchIcon from '../../images/searchIcon.svg';
 
 function HomeHeader() {
+  const history = useHistory();
   return (
     <div>
-      <img
-        src={ pofileIcon }
-        alt="profile icon"
-        data-testid="profile-top-btn"
-      />
+      <button onClick={ () => history.push('/profile') }>
+        <img
+          src={ pofileIcon }
+          alt="profile icon"
+          data-testid="profile-top-btn"
+        />
+      </button>
       <img
         src={ searchIcon }
         alt="search icon"
