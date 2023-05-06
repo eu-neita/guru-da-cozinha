@@ -1,8 +1,10 @@
 import { useHistory } from 'react-router-dom';
+import { useState } from 'react';
 import pofileIcon from '../../images/profileIcon.svg';
 import searchIcon from '../../images/searchIcon.svg';
 
 function DrinksHeader() {
+  const [isSearch, setIsSearch] = useState(false);
   const history = useHistory();
   return (
     <div>
@@ -14,11 +16,17 @@ function DrinksHeader() {
           data-testid="profile-top-btn"
         />
       </button>
-      <img
-        src={ searchIcon }
-        alt="search icon"
-        data-testid="search-top-btn"
-      />
+      <button
+        onClick={ () => (isSearch === true ? setIsSearch(false) : setIsSearch(true)) }
+      >
+        <img
+          src={ searchIcon }
+          alt="search icon"
+          data-testid="search-top-btn"
+        />
+      </button>
+
+      {isSearch && <input data-testid="search-input" type="text" name="searchInput" />}
     </div>
   );
 }
