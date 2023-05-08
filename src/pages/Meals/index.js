@@ -1,6 +1,11 @@
+import Recipes from '../../components/Recipes';
+
 function Meals() {
   return (
-    <div>oie eu sou o Meals</div>
+    <>
+      oie eu sou o Meals
+      <Recipes value="Meals" />
+    </>
   );
 }
 
