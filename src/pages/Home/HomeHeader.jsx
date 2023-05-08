@@ -2,6 +2,7 @@ import { useHistory } from 'react-router-dom';
 import { useState } from 'react';
 import pofileIcon from '../../images/profileIcon.svg';
 import searchIcon from '../../images/searchIcon.svg';
+import SearchBar from '../../components/SearchBar';
 
 function HomeHeader() {
   const [isSearch, setIsSearch] = useState(false);
@@ -25,7 +26,7 @@ function HomeHeader() {
         />
       </button>
 
-      {isSearch && <input data-testid="search-input" type="text" name="searchInput" />}
+      {isSearch && <SearchBar />}
     </div>
   );
 }
