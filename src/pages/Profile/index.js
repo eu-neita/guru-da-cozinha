@@ -1,6 +1,8 @@
+import Footer from '../../components/Footer';
+
 function Profile() {
   return (
-    <div />
+    <Footer />
   );
 }
 
