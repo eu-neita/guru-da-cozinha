@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import Header from '../components/Header';
+import Header from '../../components/Header';
 // import HomeHeader from '../pages/Home/HomeHeader';
 // import MealsHeader from '../pages/Meals/MealsHeader';
 // import DrinksHeader from '../pages/Drinks/DrinksHeader';
