@@ -2,12 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Header from '../../components/Header';
-// import HomeHeader from '../pages/Home/HomeHeader';
-// import MealsHeader from '../pages/Meals/MealsHeader';
-// import DrinksHeader from '../pages/Drinks/DrinksHeader';
-// import ProfileHeader from '../pages/Profile/ProfileHeader';
-// import DoneRecipesHeader from '../pages/DoneRecipes/DoneRecipesHeader';
-// import FavoriteRecipesHeader from '../pages/FavoriteRecipes/FavoriteRecipesHeader';
+
 const profileBtn = 'profile-top-btn';
 describe('Header component', () => {
   test('renders HomeHeader when pathname is /', () => {
