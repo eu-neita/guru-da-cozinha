@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useHistory, Redirect } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Footer from '../../components/Footer';
 
 function Profile() {
@@ -28,7 +28,6 @@ function Profile() {
       </div>
 
       <Footer />
-      {localStorage.getItem('user') ? null : <Redirect to="/" />}
     </>
   );
 }
