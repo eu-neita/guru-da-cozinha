@@ -11,6 +11,9 @@ describe('Recipes component', () => {
       await waitFor(() => {
         const corba = screen.getByRole('heading', { name: /corba/i });
         expect(corba).toBeInTheDocument();
+
+        const beef = screen.getByRole('button', { name: /beef/i });
+        expect(beef).toBeInTheDocument();
       });
     });
   });
@@ -22,6 +25,9 @@ describe('Recipes component', () => {
       await waitFor(() => {
         const gg = screen.getByRole('heading', { name: /gg/i });
         expect(gg).toBeInTheDocument();
+
+        const ordinary = screen.getByRole('button', { name: /ordinary drink/i });
+        expect(ordinary).toBeInTheDocument();
       });
     });
   });
