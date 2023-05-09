@@ -28,7 +28,6 @@ function Profile() {
       </div>
 
       <Footer />
-      {localStorage.getItem('user') ? null : <Redirect to="/" />}
     </>
   );
 }
