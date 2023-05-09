@@ -15,7 +15,6 @@ function Recipes({ value }) {
     };
     const fetchCategory = async () => {
       const data = await fetchCategoryData(value);
-      console.log(data);
       setCategory(data);
     };
     fetchRecipes();
