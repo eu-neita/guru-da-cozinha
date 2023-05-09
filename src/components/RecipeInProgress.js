@@ -1,34 +1,78 @@
+import { useState, useEffect } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import hartBtn from '../images/whiteHeartIcon.svg';
 
 function RecipeInProgress() {
-  const estadoComReceita = {
-    photo: '../images/whiteHeartIcon.svg',
-    title: 'Coração Branco',
-    category: 'categoria',
-    instructions: 'instrução',
-  };
+  const { id } = useParams();
+  const history = useHistory();
+  const [recipe, setRecipe] = useState([]);
+  useEffect(() => {
+    const fetchRecipe = async () => {
+      if (history.location.pathname.includes('drinks')) {
+        const URL_DRINKS = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
+        const responseDrink = await fetch(URL_DRINKS);
+        const dataDrink = await responseDrink.json();
+        return setRecipe(dataDrink.drinks);
+      }
+      const URL_MEAL = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
+      const response = await fetch(URL_MEAL);
+      const data = await response.json();
+      setRecipe(data.meals);
+    };
+    fetchRecipe();
+  }, [history, id]);
+  console.log(recipe);
   return (
     <div>
-      <img
-        src={ estadoComReceita.photo }
-        alt={ estadoComReceita.title }
-        data-testid="recipe-photo"
-      />
+      {history.location.pathname.includes('meals')
+        ? recipe.length > 0 && (
+          <div>
+            <img
+              src={ recipe[0].strMealThumb }
+              alt={ recipe[0].strMeal }
+              data-testid="recipe-photo"
+            />
 
-      <span data-testid="recipe-title">{ estadoComReceita.title }</span>
+            <span data-testid="recipe-title">{ recipe[0].strMeal }</span>
 
-      <button
-        data-testid="share-btn"
-      >
-        Share
-      </button>
+            <button
+              data-testid="share-btn"
+            >
+              Share
+            </button>
 
-      <button data-testid="favorite-btn">
-        <img src={ hartBtn } alt="favorite Icon" />
-      </button>
+            <button data-testid="favorite-btn">
+              <img src={ hartBtn } alt="favorite Icon" />
+            </button>
 
-      <span data-testid="recipe-category">{ estadoComReceita.category }</span>
-      <span data-testid="instructions">{ estadoComReceita.instructions }</span>
+            <span data-testid="recipe-category">{ recipe[0].strCategory }</span>
+            <span data-testid="instructions">{ recipe[0].strInstructions }</span>
+          </div>
+        )
+        : recipe.length > 0 && (
+          <div>
+            <img
+              src={ recipe[0].strDrinkThumb }
+              alt={ recipe[0].strDrink }
+              data-testid="recipe-photo"
+            />
+
+            <span data-testid="recipe-title">{ recipe[0].strDrink }</span>
+
+            <button
+              data-testid="share-btn"
+            >
+              Share
+            </button>
+
+            <button data-testid="favorite-btn">
+              <img src={ hartBtn } alt="favorite Icon" />
+            </button>
+
+            <span data-testid="recipe-category">{ recipe[0].strCategory }</span>
+            <span data-testid="instructions">{ recipe[0].strInstructions }</span>
+          </div>
+        )}
       <button data-testid="finish-recipe-btn">Finish Recipe</button>
     </div>
   );
