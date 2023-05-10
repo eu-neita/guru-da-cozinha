@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import hartBtn from '../images/whiteHeartIcon.svg';
-import Checkbox from './ingredientCheckBox';
 
 function RecipeInProgress() {
   const { id } = useParams();
@@ -95,10 +94,19 @@ function RecipeInProgress() {
             <span data-testid="instructions">{ recipe[0].strInstructions }</span>
           </div>
         )}
-      {ingredients.length > 0
+      {recipe.length > 0
         && (
           ingredients.map((ingedients, i) => (
-            <Checkbox key={ i } index={ i } label={ ingedients } id={ ingedients } />
+            <div key={ i }>
+              <input type="checkbox" id={ i } />
+              <label
+                data-testid={ `${i}-ingredient-step` }
+                htmlFor={ i }
+              >
+                {ingedients}
+
+              </label>
+            </div>
           ))
         )}
       <button data-testid="finish-recipe-btn">Finish Recipe</button>
