@@ -1,8 +1,8 @@
-function Checkbox({ label, checked, id, onChange }) {
+function Checkbox({ label, checked, id, onChange, index }) {
   return (
     <div>
       <input type="checkbox" id={ id } checked={ checked } onChange={ onChange } />
-      <label htmlFor={ id }>{label}</label>
+      <label data-testid={ `${index}-ingredient-step` } htmlFor={ id }>{label}</label>
     </div>
   );
 }
