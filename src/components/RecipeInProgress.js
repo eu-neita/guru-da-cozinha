@@ -6,6 +6,7 @@ function RecipeInProgress() {
   const { id } = useParams();
   const history = useHistory();
   const [recipe, setRecipe] = useState([]);
+  const [ingredientsAll, setIngredientsAll] = useState([]);
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -21,14 +22,19 @@ function RecipeInProgress() {
       setRecipe(data.meals);
     };
     fetchRecipe();
+    const ingredients = {};
+    if (recipe.length > 0) {
+      Object.keys(recipe[0]).forEach((key) => {
+        if (key.startsWith('strIngredient') && recipe[0][key] !== null
+        && recipe[0][key] !== '') {
+          const ingredientNum = key.replace('strIngredient', '');
+          const ingredientN = `strIngredient${ingredientNum}`;
+          ingredients[recipe[0][ingredientN]] = recipe[0][`strMeasure${ingredientNum}`];
+        }
+      });
+    }
+    setIngredientsAll(ingredients);
   }, [history, id, recipe]);
-
-  // console.log(recipe);
-  // console.log(ingredients);
-  const minValue = 9;
-  const maxValue = 28;
-  const minValue2 = 18;
-  const maxValue2 = 32;
   return (
     <div>
       {history.location.pathname.includes('meals')
@@ -54,18 +60,16 @@ function RecipeInProgress() {
 
             <span data-testid="recipe-category">{ recipe[0].strCategory }</span>
             <span data-testid="instructions">{ recipe[0].strInstructions }</span>
-            {Object.values(recipe[0])
-              .filter((val, index) => index >= minValue && index <= maxValue)
-              .filter((val) => val !== null && val !== '').map((ingedients, i) => (
-                <label
-                  data-testid={ `${i}-ingredient-step` }
-                  htmlFor={ i }
-                  key={ i }
-                >
-                  <input type="checkbox" id={ i } />
-                  {ingedients}
-                </label>
-              ))}
+            {Object.keys(ingredientsAll).map((ingedient, ind) => (
+              <label
+                data-testid={ `${ind}-ingredient-step` }
+                htmlFor={ ind }
+                key={ ind }
+              >
+                <input type="checkbox" id={ ind } />
+                {ingedient}
+              </label>
+            ))}
           </div>
         )
         : recipe.length > 0 && (
@@ -90,18 +94,16 @@ function RecipeInProgress() {
 
             <span data-testid="recipe-category">{ recipe[0].strCategory }</span>
             <span data-testid="instructions">{ recipe[0].strInstructions }</span>
-            {Object.values(recipe[0])
-              .filter((val, index) => index >= minValue2 && index <= maxValue2)
-              .filter((val) => val !== null && val !== '').map((ingedient, ind) => (
-                <label
-                  data-testid={ `${ind}-ingredient-step` }
-                  htmlFor={ ind }
-                  key={ ind }
-                >
-                  <input type="checkbox" id={ ind } />
-                  {ingedient}
-                </label>
-              ))}
+            {Object.keys(ingredientsAll).map((ingedient, ind) => (
+              <label
+                data-testid={ `${ind}-ingredient-step` }
+                htmlFor={ ind }
+                key={ ind }
+              >
+                <input type="checkbox" id={ ind } />
+                {ingedient}
+              </label>
+            ))}
           </div>
         )}
       <button data-testid="finish-recipe-btn">Finish Recipe</button>
