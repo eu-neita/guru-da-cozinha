@@ -6,6 +6,8 @@ function RecipeInProgress() {
   const { id } = useParams();
   const history = useHistory();
   const [recipe, setRecipe] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
+
   useEffect(() => {
     const fetchRecipe = async () => {
       if (history.location.pathname.includes('drinks')) {
@@ -20,8 +22,27 @@ function RecipeInProgress() {
       setRecipe(data.meals);
     };
     fetchRecipe();
-  }, [history, id]);
-  console.log(recipe);
+    const filterIngredients = (minValue, maxValue) => {
+      const ingredientsKey = recipe.length > 0
+        ? Object.values(recipe[0])
+          .filter((val, index) => index >= minValue && index <= maxValue)
+          .filter((val) => val !== null && val !== '')
+        : [];
+      setIngredients(ingredientsKey);
+    };
+    if (history.location.pathname.includes('drinks')) {
+      const minValue2 = 17;
+      const maxValue2 = 31;
+      filterIngredients(minValue2, maxValue2);
+    } else {
+      const minValue = 9;
+      const maxValue = 28;
+      filterIngredients(minValue, maxValue);
+    }
+  }, [history, id, recipe]);
+
+  // console.log(recipe);
+  console.log(ingredients);
   return (
     <div>
       {history.location.pathname.includes('meals')
