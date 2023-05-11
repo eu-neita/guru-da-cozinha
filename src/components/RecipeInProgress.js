@@ -50,9 +50,6 @@ function RecipeInProgress() {
     }
   };
 
-  // useEffect(() => {
-  //   localStorage.setItem('checkedIngredients', JSON.stringify(checkedIngredients));
-  // }, [checkedIngredients]);
   return (
     <div>
       {history.location.pathname.includes('meals')
