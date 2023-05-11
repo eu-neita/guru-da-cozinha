@@ -49,6 +49,11 @@ function RecipeInProgress() {
       setCheckedIngredients([...checkedIngredients, ingredientIndex]);
     }
   };
+  const [copiedIsTrue, setCopiedIsTrue] = useState(false);
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href.replace('/in-progress', ''));
+    setCopiedIsTrue(true);
+  };
 
   useEffect(() => {
     localStorage.setItem('checkedIngredients', JSON.stringify(checkedIngredients));
@@ -65,12 +70,6 @@ function RecipeInProgress() {
             />
 
             <span data-testid="recipe-title">{ recipe[0].strMeal }</span>
-
-            <button
-              data-testid="share-btn"
-            >
-              Share
-            </button>
 
             <button data-testid="favorite-btn">
               <img src={ hartBtn } alt="favorite Icon" />
@@ -106,12 +105,6 @@ function RecipeInProgress() {
 
             <span data-testid="recipe-title">{ recipe[0].strDrink }</span>
 
-            <button
-              data-testid="share-btn"
-            >
-              Share
-            </button>
-
             <button data-testid="favorite-btn">
               <img src={ hartBtn } alt="favorite Icon" />
             </button>
@@ -136,6 +129,13 @@ function RecipeInProgress() {
             ))}
           </div>
         )}
+      <button
+        data-testid="share-btn"
+        onClick={ handleCopyLink }
+      >
+        Share
+      </button>
+      {copiedIsTrue && <span>Link copied!</span>}
       <button data-testid="finish-recipe-btn">Finish Recipe</button>
     </div>
   );
