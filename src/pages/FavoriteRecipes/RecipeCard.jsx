@@ -14,7 +14,13 @@ function RecipeCard({ recipe, index }) {
       <p
         data-testid={ `${index}-horizontal-top-text` }
       >
-        { `${recipe.nationality} - ${recipe.category}` }
+        { recipe.type === 'meal'
+          ? (
+            `${recipe.nationality} - ${recipe.category}`
+          )
+          : (
+            recipe.alcoholicOrNot
+          )}
       </p>
       <p data-testid={ `${index}-horizontal-name` }>{ recipe.name }</p>
       <button src={ shareIcon } data-testid={ `${index}-horizontal-share-btn` }>
