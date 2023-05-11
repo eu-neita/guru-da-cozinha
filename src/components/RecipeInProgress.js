@@ -8,7 +8,9 @@ function RecipeInProgress() {
   const history = useHistory();
   const [recipe, setRecipe] = useState([]);
   const [ingredientsAll, setIngredientsAll] = useState([]);
-  const [checkedIngredients, setCheckedIngredients] = useState([]);
+  const [checkedIngredients, setCheckedIngredients] = useState(
+    JSON.parse(localStorage.getItem('checkedIngredients')) || [],
+  );
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -47,6 +49,10 @@ function RecipeInProgress() {
       setCheckedIngredients([...checkedIngredients, ingredientIndex]);
     }
   };
+
+  useEffect(() => {
+    localStorage.setItem('checkedIngredients', JSON.stringify(checkedIngredients));
+  }, [checkedIngredients]);
   return (
     <div>
       {history.location.pathname.includes('meals')
