@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter, Route, renderWithRouter } from 'react-router-dom';
+import { MemoryRouter, Route } from 'react-router-dom';
 import RecipeInProgress from '../components/RecipeInProgress';
 
 describe('RecipeInProgress', () => {
@@ -95,9 +95,9 @@ describe('RecipeInProgress', () => {
     await screen.findByTestId('recipe-photo');
     expect(screen.getByTestId('recipe-photo')).toHaveAttribute(
       'src',
-      recipeData.strMealThumb,
+      recipeData.strDrinkThumb,
     );
-    expect(screen.getByTestId('recipe-title')).toHaveTextContent(recipeData.strMeal);
+    expect(screen.getByTestId('recipe-title')).toHaveTextContent(recipeData.idDrink);
     expect(screen.getByTestId('recipe-category')).toHaveTextContent(
       recipeData.strCategory,
     );
