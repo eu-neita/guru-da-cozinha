@@ -1,5 +1,8 @@
 import propTypes from 'prop-types';
 
+import shareIcon from '../../images/shareIcon.svg';
+import blackHeartIcon from '../../images/blackHeartIcon.svg';
+
 function RecipeCard({ recipe, index }) {
   return (
     <div>
@@ -8,10 +11,18 @@ function RecipeCard({ recipe, index }) {
         alt={ recipe.name }
         data-testid={ `${index}-horizontal-image` }
       />
-      <p data-testid={ `${index}-horizontal-top-text` }>{ recipe.category }</p>
+      <p
+        data-testid={ `${index}-horizontal-top-text` }
+      >
+        { `${recipe.nationality} - ${recipe.category}` }
+      </p>
       <p data-testid={ `${index}-horizontal-name` }>{ recipe.name }</p>
-      <button data-testid={ `${index}-horizontal-share-btn` }>Compartilhar</button>
-      <button data-testid={ `${index}-horizontal-favorite-btn` }>Favoritar</button>
+      <button src={ shareIcon } data-testid={ `${index}-horizontal-share-btn` }>
+        <img src={ shareIcon } alt="search icon" />
+      </button>
+      <button src={ blackHeartIcon } data-testid={ `${index}-horizontal-favorite-btn` }>
+        <img src={ blackHeartIcon } alt="black heart" />
+      </button>
     </div>
   );
 }
