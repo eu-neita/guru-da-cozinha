@@ -1,14 +1,16 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter, Route, renderWithRouter } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter, Route } from 'react-router-dom';
 import RecipeInProgress from '../components/RecipeInProgress';
 
+const recipePhoto = 'recipe-photo';
+const instruction = 'Put a large saucepan of water on to boil.';
 describe('RecipeInProgress', () => {
   test('renders recipe photo, title, share and favorite buttons, category, instructions and ingredients checkboxes', async () => {
     const recipeData = {
       idMeal: '52771',
       strMeal: 'Spicy Arrabiata Penne',
       strCategory: 'Vegetarian',
-      strInstructions: 'Put a large saucepan of water on to boil. ',
+      strInstructions: instruction,
       strMealThumb: 'https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg',
       strIngredient1: 'penne rigate',
       strMeasure1: '1 pound',
@@ -31,7 +33,7 @@ describe('RecipeInProgress', () => {
       }),
     });
 
-    const { container } = render(
+    render(
       <MemoryRouter initialEntries={ [`/meals/${recipeData.idMeal}/in-progress`] }>
         <Route path="/meals/:id/in-progress">
           <RecipeInProgress />
@@ -43,8 +45,8 @@ describe('RecipeInProgress', () => {
       `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipeData.idMeal}`,
     );
 
-    await screen.findByTestId('recipe-photo');
-    expect(screen.getByTestId('recipe-photo')).toHaveAttribute(
+    await screen.findByTestId(recipePhoto);
+    expect(screen.getByTestId(recipePhoto)).toHaveAttribute(
       'src',
       recipeData.strMealThumb,
     );
@@ -52,7 +54,7 @@ describe('RecipeInProgress', () => {
     expect(screen.getByTestId('recipe-category')).toHaveTextContent(
       recipeData.strCategory,
     );
-    expect(screen.getByTestId('instructions')).toHaveTextContent('Put a large saucepan of water on to boil.');
+    expect(screen.getByTestId('instructions')).toHaveTextContent(instruction);
 
     global.fetch.mockRestore();
   });
@@ -80,7 +82,7 @@ describe('RecipeInProgress', () => {
     // const { getByTestId, history } = renderWithRouter(<RecipeInProgress />, {
     //   route: `/comidas/${recipeData.idDrink}`,
     // });
-    const { getByTestId, container } = render(
+    render(
       <MemoryRouter initialEntries={ [`/drinks/${recipeData.idDrink}/in-progress`] }>
         <Route path="/drinks/:id/in-progress">
           <RecipeInProgress />
@@ -92,12 +94,12 @@ describe('RecipeInProgress', () => {
       `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${recipeData.idDrink}`,
     );
 
-    await screen.findByTestId('recipe-photo');
-    expect(screen.getByTestId('recipe-photo')).toHaveAttribute(
+    await screen.findByTestId(recipePhoto);
+    expect(screen.getByTestId(recipePhoto)).toHaveAttribute(
       'src',
-      recipeData.strMealThumb,
+      recipeData.strDrinkThumb,
     );
-    expect(screen.getByTestId('recipe-title')).toHaveTextContent(recipeData.strMeal);
+    expect(screen.getByTestId('recipe-title')).toHaveTextContent(recipeData.idDrink);
     expect(screen.getByTestId('recipe-category')).toHaveTextContent(
       recipeData.strCategory,
     );
