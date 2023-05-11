@@ -1,9 +1,19 @@
+import { useState } from 'react';
 import propTypes from 'prop-types';
+import copy from 'clipboard-copy';
 
 import shareIcon from '../../images/shareIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
 
 function RecipeCard({ recipe, index }) {
+  const [showCopyMessage, setShowCopyMessage] = useState(false);
+
+  const handleClickShare = () => {
+    const url = `${window.location.origin}/${recipe.type}s/${recipe.id}`;
+    copy(url);
+    setShowCopyMessage(true);
+  };
+
   return (
     <div>
       <img
@@ -23,7 +33,12 @@ function RecipeCard({ recipe, index }) {
           )}
       </p>
       <p data-testid={ `${index}-horizontal-name` }>{ recipe.name }</p>
-      <button src={ shareIcon } data-testid={ `${index}-horizontal-share-btn` }>
+      { showCopyMessage && <p>Link copied!</p>}
+      <button
+        onClick={ handleClickShare }
+        src={ shareIcon }
+        data-testid={ `${index}-horizontal-share-btn` }
+      >
         <img src={ shareIcon } alt="search icon" />
       </button>
       <button src={ blackHeartIcon } data-testid={ `${index}-horizontal-favorite-btn` }>
