@@ -6,6 +6,8 @@ function RecipeInProgress() {
   const { id } = useParams();
   const history = useHistory();
   const [recipe, setRecipe] = useState([]);
+  const [ingredientsAll, setIngredientsAll] = useState([]);
+
   useEffect(() => {
     const fetchRecipe = async () => {
       if (history.location.pathname.includes('drinks')) {
@@ -20,8 +22,19 @@ function RecipeInProgress() {
       setRecipe(data.meals);
     };
     fetchRecipe();
-  }, [history, id]);
-  console.log(recipe);
+    const ingredients = {};
+    if (recipe.length > 0) {
+      Object.keys(recipe[0]).forEach((key) => {
+        if (key.startsWith('strIngredient') && recipe[0][key] !== null
+        && recipe[0][key] !== '') {
+          const ingredientNum = key.replace('strIngredient', '');
+          const ingredientN = `strIngredient${ingredientNum}`;
+          ingredients[recipe[0][ingredientN]] = recipe[0][`strMeasure${ingredientNum}`];
+        }
+      });
+    }
+    setIngredientsAll(ingredients);
+  }, [history, id, recipe]);
   return (
     <div>
       {history.location.pathname.includes('meals')
@@ -47,6 +60,16 @@ function RecipeInProgress() {
 
             <span data-testid="recipe-category">{ recipe[0].strCategory }</span>
             <span data-testid="instructions">{ recipe[0].strInstructions }</span>
+            {Object.keys(ingredientsAll).map((ingedient, ind) => (
+              <label
+                data-testid={ `${ind}-ingredient-step` }
+                htmlFor={ ind }
+                key={ ind }
+              >
+                <input type="checkbox" id={ ind } />
+                {ingedient}
+              </label>
+            ))}
           </div>
         )
         : recipe.length > 0 && (
@@ -71,6 +94,16 @@ function RecipeInProgress() {
 
             <span data-testid="recipe-category">{ recipe[0].strCategory }</span>
             <span data-testid="instructions">{ recipe[0].strInstructions }</span>
+            {Object.keys(ingredientsAll).map((ingedient, ind) => (
+              <label
+                data-testid={ `${ind}-ingredient-step` }
+                htmlFor={ ind }
+                key={ ind }
+              >
+                <input type="checkbox" id={ ind } />
+                {ingedient}
+              </label>
+            ))}
           </div>
         )}
       <button data-testid="finish-recipe-btn">Finish Recipe</button>
