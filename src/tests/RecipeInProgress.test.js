@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import RecipeInProgress from '../components/RecipeInProgress';
 
@@ -106,5 +106,47 @@ describe('RecipeInProgress', () => {
     expect(screen.getByTestId('instructions')).toHaveTextContent('Put a large saucepan of water on to boil.');
 
     global.fetch.mockRestore();
+  });
+
+  describe('handleCopyLink', () => {
+    it('copies the correct URL to the clipboard', () => {
+      const recipeData = {
+        idMeal: '52771',
+        strMeal: 'Spicy Arrabiata Penne',
+        strCategory: 'Vegetarian',
+        strInstructions: instruction,
+        strMealThumb: 'https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg',
+        strIngredient1: 'penne rigate',
+        strMeasure1: '1 pound',
+        strIngredient2: 'olive oil',
+        strMeasure2: '1/4 cup',
+        strIngredient3: 'garlic',
+        strMeasure3: '3 cloves',
+        strIngredient4: 'chopped tomatoes',
+        strMeasure4: '1 tin',
+        strIngredient5: 'red pepper flakes',
+        strMeasure5: '1/2 teaspoon',
+        strIngredient6: 'italian seasoning',
+        strMeasure6: '1 tablespoon',
+        strIngredient7: 'basil',
+        strMeasure7: '1 handful',
+      };
+      const clipboard = { writeText: jest.fn() };
+      Object.assign(navigator, { clipboard });
+
+      render(
+        <MemoryRouter initialEntries={ [`/drinks/${recipeData.idMeal}/in-progress`] }>
+          <Route path="/drinks/:id/in-progress">
+            <RecipeInProgress />
+          </Route>
+        </MemoryRouter>,
+      );
+
+      const shareBtn = screen.getByTestId('share-btn');
+      // const spanText = screen.getByText('Link copied!');
+      fireEvent.click(shareBtn);
+
+      expect(clipboard.writeText).toHaveBeenCalledWith('http://localhost:3000/meals/52771');
+    });
   });
 });
