@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import hartBtn from '../images/whiteHeartIcon.svg';
+import '../styles/recipeInProgress.css';
 
 function RecipeInProgress() {
   const { id } = useParams();
   const history = useHistory();
   const [recipe, setRecipe] = useState([]);
   const [ingredientsAll, setIngredientsAll] = useState([]);
+  const [checkedIngredients, setCheckedIngredients] = useState([]);
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -35,6 +37,16 @@ function RecipeInProgress() {
     }
     setIngredientsAll(ingredients);
   }, [history, id, recipe]);
+
+  const handleCheckBox = (ingredientIndex) => {
+    const isChecked = checkedIngredients.includes(ingredientIndex);
+    if (isChecked) {
+      setCheckedIngredients(checkedIngredients
+        .filter((index) => index !== ingredientIndex));
+    } else {
+      setCheckedIngredients([...checkedIngredients, ingredientIndex]);
+    }
+  };
   return (
     <div>
       {history.location.pathname.includes('meals')
@@ -60,14 +72,20 @@ function RecipeInProgress() {
 
             <span data-testid="recipe-category">{ recipe[0].strCategory }</span>
             <span data-testid="instructions">{ recipe[0].strInstructions }</span>
-            {Object.keys(ingredientsAll).map((ingedient, ind) => (
+            {Object.keys(ingredientsAll).map((ingredient, index) => (
               <label
-                data-testid={ `${ind}-ingredient-step` }
-                htmlFor={ ind }
-                key={ ind }
+                key={ index }
+                htmlFor={ index }
+                data-testid={ `${index}-ingredient-step` }
+                className={ checkedIngredients.includes(index) ? 'checked' : '' }
               >
-                <input type="checkbox" id={ ind } />
-                {ingedient}
+                <input
+                  type="checkbox"
+                  id={ index }
+                  checked={ checkedIngredients.includes(index) }
+                  onChange={ () => handleCheckBox(index) }
+                />
+                {ingredient}
               </label>
             ))}
           </div>
@@ -94,14 +112,20 @@ function RecipeInProgress() {
 
             <span data-testid="recipe-category">{ recipe[0].strCategory }</span>
             <span data-testid="instructions">{ recipe[0].strInstructions }</span>
-            {Object.keys(ingredientsAll).map((ingedient, ind) => (
+            {Object.keys(ingredientsAll).map((ingredient, index) => (
               <label
-                data-testid={ `${ind}-ingredient-step` }
-                htmlFor={ ind }
-                key={ ind }
+                key={ index }
+                htmlFor={ index }
+                data-testid={ `${index}-ingredient-step` }
+                className={ checkedIngredients.includes(index) ? 'checked' : '' }
               >
-                <input type="checkbox" id={ ind } />
-                {ingedient}
+                <input
+                  type="checkbox"
+                  id={ index }
+                  checked={ checkedIngredients.includes(index) }
+                  onChange={ () => handleCheckBox(index) }
+                />
+                {ingredient}
               </label>
             ))}
           </div>
@@ -112,7 +136,3 @@ function RecipeInProgress() {
 }
 
 export default RecipeInProgress;
-
-// 1a - fazer pegar os dados somente de uma receita com um id especifico
-
-// 2 a - construir a tela com as informaçoes da receita em progresso;
