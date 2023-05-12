@@ -6,9 +6,19 @@ import copy from 'clipboard-copy';
 
 import App from '../App';
 
-const fakeFavoriteRecipe = {
+const fakeFavoriteMeal = {
   id: '11111',
   type: 'meal',
+  nationality: 'Brazilian',
+  category: 'Side',
+  alcoholicOrNot: '',
+  name: 'Nome da Receita',
+  image: 'fakeImageUrl',
+};
+
+const fakeFavoriteDrink = {
+  id: '11111',
+  type: 'drink',
   nationality: 'Brazilian',
   category: 'Side',
   alcoholicOrNot: '',
@@ -49,8 +59,8 @@ describe('Testa página Favorite Recipes', () => {
 
     expect(history.location.pathname).toBe('/profile');
   });
-  it('Deve mostar "Link copied!" quando o botão de compartilhar receita for clicado', () => {
-    const fakeFavoriteRecipes = [fakeFavoriteRecipe];
+  it('Deve mostrar "Link copied!" quando o botão de compartilhar receita for clicado', () => {
+    const fakeFavoriteRecipes = [fakeFavoriteDrink];
     const json = JSON.stringify(fakeFavoriteRecipes);
     localStorage.setItem('favoriteRecipes', json);
 
@@ -73,8 +83,8 @@ describe('Testa página Favorite Recipes', () => {
     expect(copyMessage).toBeInTheDocument();
   });
 
-  it('Deve mostar ser possível remover uma receita dos favoritos', () => {
-    const fakeFavoriteRecipes = [fakeFavoriteRecipe];
+  it('Deve ser possível remover uma receita dos favoritos', () => {
+    const fakeFavoriteRecipes = [fakeFavoriteMeal];
     const json = JSON.stringify(fakeFavoriteRecipes);
     localStorage.setItem('favoriteRecipes', json);
 
@@ -95,5 +105,35 @@ describe('Testa página Favorite Recipes', () => {
     );
 
     expect(storagedFavoriteRecipes).toHaveLength(0);
+  });
+
+  it('Deve ser possível filtrar as receitas favoritas', () => {
+    const fakeFavoriteRecipes = [fakeFavoriteMeal];
+    const json = JSON.stringify(fakeFavoriteRecipes);
+    localStorage.setItem('favoriteRecipes', json);
+
+    const history = createMemoryHistory({ initialEntries: [favoriteRecipePathname] });
+
+    render(
+      <Router history={ history }>
+        <App />
+      </Router>,
+    );
+
+    const filterAllRecipesButton = screen.getByTestId('filter-by-all-btn');
+
+    userEvent.click(filterAllRecipesButton);
+
+    const filterMealsRecipesButton = screen.getByTestId('filter-by-meal-btn');
+
+    userEvent.click(filterMealsRecipesButton);
+
+    const filterDrinksRecipesButton = screen.getByTestId('filter-by-drink-btn');
+
+    userEvent.click(filterDrinksRecipesButton);
+
+    const recipeName = screen.queryByTestId('0-horizontal-name');
+
+    expect(recipeName).not.toBeInTheDocument();
   });
 });

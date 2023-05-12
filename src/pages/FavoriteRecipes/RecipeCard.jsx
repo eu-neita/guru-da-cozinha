@@ -2,6 +2,7 @@ import { useState } from 'react';
 import propTypes from 'prop-types';
 import copy from 'clipboard-copy';
 
+import { Link } from 'react-router-dom';
 import shareIcon from '../../images/shareIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
 
@@ -21,11 +22,14 @@ function RecipeCard({ recipe, index, unfavoriteRecipeById }) {
 
   return (
     <div>
-      <img
-        src={ recipe.image }
-        alt={ recipe.name }
-        data-testid={ `${index}-horizontal-image` }
-      />
+      <Link to={ `/${recipe.type}s/${recipe.id}` }>
+        <img
+          src={ recipe.image }
+          alt={ recipe.name }
+          data-testid={ `${index}-horizontal-image` }
+        />
+        <p data-testid={ `${index}-horizontal-name` }>{ recipe.name }</p>
+      </Link>
       <p
         data-testid={ `${index}-horizontal-top-text` }
       >
@@ -37,7 +41,6 @@ function RecipeCard({ recipe, index, unfavoriteRecipeById }) {
             recipe.alcoholicOrNot
           )}
       </p>
-      <p data-testid={ `${index}-horizontal-name` }>{ recipe.name }</p>
       { showCopyMessage && <p>Link copied!</p>}
       <button
         onClick={ handleClickShare }
