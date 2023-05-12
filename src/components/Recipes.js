@@ -10,6 +10,7 @@ function Recipes({ value }) {
   const [recipes, setRecipes] = useState([]);
   const [category, setCategory] = useState([]);
   const [recipesByCategory, setRecipesByCategory] = useState([]);
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -29,22 +30,24 @@ function Recipes({ value }) {
 
   const MAX_CATEGORY = 5;
   const categoryResults = category.slice(0, MAX_CATEGORY);
+  const removeFilter = () => {
+    setRecipesByCategory([]);
+  };
 
   const handleClickFilter = async (page, catFil) => {
     if (page === 'Meals') {
       const newByCategory = await fetchFilterMeal(catFil);
       setRecipesByCategory(newByCategory);
-      console.log(newByCategory);
+      setFilter(catFil);
     }
     if (page === 'Drinks') {
       const newByCategory = await fetchFilterDrink(catFil);
       setRecipesByCategory(newByCategory);
-      console.log(newByCategory);
+      setFilter(catFil);
     }
-  };
-
-  const removeFilter = () => {
-    setRecipesByCategory([]);
+    if (filter.includes(catFil)) {
+      removeFilter();
+    }
   };
 
   if (recipesByCategory.length > 0) {

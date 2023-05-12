@@ -48,6 +48,17 @@ describe('Recipes component', () => {
         const sushi = screen.getByRole('heading', { name: /sushi/i });
         expect(sushi).toBeInTheDocument();
       });
+      await waitFor(() => {
+        const breakfast = screen.getByRole('button', { name: /breakfast/i });
+        userEvent.click(breakfast);
+        userEvent.click(breakfast);
+      });
+      await waitFor(() => {
+        const corba = screen.getByRole('heading', { name: /corba/i });
+        expect(corba).toBeInTheDocument();
+        const sushi = screen.getByRole('heading', { name: /sushi/i });
+        expect(sushi).toBeInTheDocument();
+      });
     });
   });
 
@@ -86,6 +97,17 @@ describe('Recipes component', () => {
       await waitFor(() => {
         const all = screen.getByRole('button', { name: /all/i });
         userEvent.click(all);
+      });
+      await waitFor(() => {
+        const gg = screen.getByRole('heading', { name: /gg/i });
+        expect(gg).toBeInTheDocument();
+        const kir = screen.getByRole('heading', { name: /kir/i });
+        expect(kir).toBeInTheDocument();
+      });
+      await waitFor(() => {
+        const shake = screen.getByRole('button', { name: /shake/i });
+        userEvent.click(shake);
+        userEvent.click(shake);
       });
       await waitFor(() => {
         const gg = screen.getByRole('heading', { name: /gg/i });
