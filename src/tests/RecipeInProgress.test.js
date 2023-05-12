@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route } from 'react-router-dom';
+import { MemoryRouter, Route, Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import RecipeInProgress from '../components/RecipeInProgress';
 
 const recipePhoto = 'recipe-photo';
@@ -115,5 +116,243 @@ describe('RecipeInProgress', () => {
     expect(screen.getByTestId('instructions')).toHaveTextContent('Pour vodka, blue curacao and lemon juice into a cocktail shaker.');
 
     global.fetch.mockRestore();
+    const shareBtn = screen.getByTestId('share-btn');
+    // const spanText = screen.getByText('Link copied!');
+    fireEvent.click(shareBtn);
+
+    waitFor(() => {
+      expect(clipboard.writeText).toHaveBeenCalledWith('http://localhost:3000/drinks/178319');
+    });
+  });
+
+  it('should render ingredients checkboxes', async () => {
+    const recipe = [
+      {
+        strMeal: 'Pasta',
+        strIngredient1: 'Ingredient 1',
+        strIngredient2: 'Ingredient 2',
+      },
+      {
+        strMeal: 'Curry',
+        strIngredient1: 'Ingredient 3',
+        strIngredient2: 'Ingredient 4',
+      },
+    ];
+
+    render(
+      <MemoryRouter initialEntries={ ['/recipe/in-progress/52771'] }>
+        <Route path="/recipe/in-progress/:id">
+          <RecipeInProgress recipe={ recipe } />
+        </Route>
+      </MemoryRouter>,
+    );
+
+    // Verifica se os checkboxes foram renderizados
+    const checkboxes = await screen.findAllByRole('checkbox');
+    expect(checkboxes).toHaveLength(8);
+
+    // Simula o clique no primeiro checkbox
+    fireEvent.click(checkboxes[0]);
+    expect(localStorage.getItem('checkedIngredients')).toBe('[0]');
+    expect(checkboxes[0]).toBeChecked();
+    fireEvent.click(checkboxes[0]);
+    // Check if the checkbox is unchecked
+    waitFor(() => {
+      expect(checkboxes[0].checked).toBe(false);
+      expect(localStorage.getItem('checkedIngredients')).toBe(null);
+    });
+
+    // Simula o clique no segundo checkbox
+    fireEvent.click(checkboxes[1]);
+    expect(checkboxes[1]).toBeChecked();
+    expect(localStorage.getItem('checkedIngredients')).toBe('[1]');
+    fireEvent.click(checkboxes[1]);
+
+    // Check if the checkbox is unchecked
+    waitFor(() => {
+      expect(checkboxes[1].checked).toBe(false);
+      expect(localStorage.getItem('checkedIngredients')).toBe(null);
+    });
+    // Simula o clique no terceiro checkbox
+    fireEvent.click(checkboxes[2]);
+    expect(checkboxes[2]).toBeChecked();
+    expect(localStorage.getItem('checkedIngredients')).toBe('[2]');
+    fireEvent.click(checkboxes[2]);
+
+    // Check if the checkbox is unchecked
+    waitFor(() => {
+      expect(checkboxes[2].checked).toBe(false);
+      expect(localStorage.getItem('checkedIngredients')).toBe(null);
+    });
+    // Simula o clique no quarto checkbox
+    fireEvent.click(checkboxes[3]);
+    expect(checkboxes[3]).toBeChecked();
+    expect(localStorage.getItem('checkedIngredients')).toBe('[3]');
+    fireEvent.click(checkboxes[3]);
+
+    // Check if the checkbox is unchecked
+    waitFor(() => {
+      expect(localStorage.getItem('checkedIngredients')).toBe(null);
+      expect(checkboxes[3].checked).toBe(false);
+    });
+  });
+
+  it('should save finished recipe to localStorage and redirect to done-recipes page', () => {
+    const recipe = [
+      {
+        idMeal: '1',
+        strMeal: 'Spaghetti',
+        strMealThumb: 'https://www.example.com/spaghetti.jpg',
+        strArea: 'Italian',
+        strCategory: 'Pasta',
+        strTags: 'Italian, Dinner',
+        strInstructions: 'Cook the spaghetti...',
+        strIngredient1: 'Spaghetti',
+        strIngredient2: 'Tomato Sauce',
+        strIngredient3: 'Ground Beef',
+        strIngredient4: '',
+        strIngredient5: '',
+        strIngredient6: '',
+        strIngredient7: '',
+        strIngredient8: '',
+        strIngredient9: '',
+        strIngredient10: '',
+      },
+    ];
+    const history = createMemoryHistory();
+    const { getByTestId } = render(
+      <Router history={ history }>
+        <RecipeInProgress recipe={ recipe } />
+      </Router>,
+    );
+
+    // Simulate checking all ingredients
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach((checkbox) => {
+      fireEvent.click(checkbox);
+    });
+
+    // Simulate clicking on "Finish Recipe" button
+    const finishButton = getByTestId('finish-recipe-btn');
+    fireEvent.click(finishButton);
+
+    // Verify if recipe was saved to localStorage
+    waitFor(() => {
+      const expectedRecipe = {
+        id: '1',
+        type: 'meal',
+        nationality: 'Italian',
+        category: 'Pasta',
+        alcoholicOrNot: '',
+        name: 'Spaghetti',
+        image: 'https://www.example.com/spaghetti.jpg',
+        doneDate: expect.any(String),
+        tags: ['Italian', ' Dinner'],
+      };
+
+      expect(JSON.parse(localStorage.getItem('doneRecipes'))).toContainEqual(expectedRecipe);
+    });
+    // Verify if localStorage checkedIngredients was reset
+    const checkedIngredients = JSON.parse(localStorage.getItem('checkedIngredients'));
+    waitFor(() => {
+      expect(checkedIngredients).toBe([]);
+    });
+    // Verify if the page was redirected to "/done-recipes"
+    waitFor(() => {
+      expect(history.location.pathname).toBe('/done-recipes');
+    });
+  });
+  test('should return an object with properties of drink', () => {
+    const recipe = [
+      {
+        idDrink: '1',
+        strDrink: 'Margarita',
+        strDrinkThumb: 'https://www.example.com/margarita.jpg',
+        strCategory: 'Cocktail',
+        strAlcoholic: 'Alcoholic',
+        strTags: 'Tequila, Lime',
+        strInstructions: 'Shake the tequila...',
+        strIngredient1: 'Tequila',
+        strIngredient2: 'Lime Juice',
+        strIngredient3: 'Triple Sec',
+        strIngredient4: '',
+        strIngredient5: '',
+        strIngredient6: '',
+        strIngredient7: '',
+        strIngredient8: '',
+        strIngredient9: '',
+        strIngredient10: '',
+      },
+    ];
+    const history = createMemoryHistory();
+    const { getByTestId } = render(
+      <Router history={ history }>
+        <RecipeInProgress recipe={ recipe } />
+      </Router>,
+    );
+
+    // Simulate checking all ingredients
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach((checkbox) => {
+      fireEvent.click(checkbox);
+    });
+
+    // Simulate clicking on "Finish Recipe" button
+    const finishButton = getByTestId('finish-recipe-btn');
+    fireEvent.click(finishButton);
+
+    waitFor(() => {
+      const expectedRecipe = {
+        id: '1',
+        type: 'drink',
+        nationality: '',
+        category: 'Cocktail',
+        alcoholicOrNot: 'Alcoholic',
+        name: 'Margarita',
+        image: 'https://www.example.com/margarita.jpg',
+      };
+
+      expect(JSON.parse(localStorage.getItem('doneRecipes'))).toContainEqual(expectedRecipe);
+    });
+    // Verify if the page was redirected to "/done-recipes"
+    waitFor(() => {
+      expect(history.location.pathname).toBe('/done-recipes');
+    });
+  });
+});
+
+describe('RecipeInProgress', () => {
+  it('should toggle favorite icon when clicked', () => {
+    const handleCheckBox = jest.fn();
+    const { getByTestId } = render(
+      <MemoryRouter initialEntries={ ['/meals/52771/in-progress'] }>
+        <Route path="/meals/52771/in-progress">
+          <RecipeInProgress handleCheckBox={ handleCheckBox } />
+        </Route>
+      </MemoryRouter>,
+    );
+    const favoriteBtn = getByTestId('favorite-btn');
+
+    expect(favoriteBtn).toBeInTheDocument();
+    expect(favoriteBtn).toHaveAttribute('src', 'whiteHeartIcon.svg');
+
+    fireEvent.click(favoriteBtn);
+    waitFor(() => {
+      expect(favoriteBtn).toHaveAttribute('src', 'blackHeartIcon.svg');
+      expect(JSON.parse(localStorage.getItem('favoriteRecipes'))).toEqual({
+        id: '52771',
+        type: 'meal',
+        nationality: 'Italian',
+        category: 'Vegetarian',
+        alcoholicOrNot: '',
+        name: 'Spicy Arrabiata Penne',
+        image: 'https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg',
+      });
+    });
+    fireEvent.click(favoriteBtn);
+    waitFor(() => {
+      expect(favoriteBtn).toHaveAttribute('src', 'whiteHeartIcon.svg');
+      expect(localStorage.getItem('favoriteRecipes')).toEqual([]);
+    });
   });
 });

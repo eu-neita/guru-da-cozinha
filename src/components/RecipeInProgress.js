@@ -54,9 +54,9 @@ function RecipeInProgress() {
     navigator.clipboard.writeText(window.location.href.replace('/in-progress', ''));
     setCopiedIsTrue(true);
   };
-  const objLocalSave = () => {
-    const mealOrDrink = recipe[0].strMeal !== undefined ? 'meal' : 'drink';
-    const newObj = {
+  const handleFavoriteBtn = () => {
+    const mealOrDrink = recipe[0] && recipe[0].strMeal !== undefined ? 'meal' : 'drink';
+    const newObj = recipe[0] && {
       id: recipe[0].idMeal || recipe[0].idDrink,
       type: mealOrDrink,
       nationality: recipe[0].strArea || '',
@@ -65,17 +65,13 @@ function RecipeInProgress() {
       name: recipe[0].strDrink || recipe[0].strMeal,
       image: recipe[0].strMealThumb || recipe[0].strDrinkThumb,
     };
-    return newObj;
-  };
-  const handleFavoriteBtn = () => {
-    const newObj = objLocalSave();
     if (heartIcon === whiteHeartIcon) {
       setHeartIcon(blackHeartIcon);
     } else {
       setHeartIcon(whiteHeartIcon);
     }
     const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
-    if (favoriteRecipes.some((obj) => obj.id === id)) {
+    if (favoriteRecipes.some((obj) => obj && obj.id === id)) {
       const updateFavoriteRecipes = favoriteRecipes.filter((obj) => obj.id !== id);
       localStorage.setItem('favoriteRecipes', JSON.stringify(updateFavoriteRecipes));
     } else {
@@ -85,7 +81,7 @@ function RecipeInProgress() {
   };
   useEffect(() => {
     const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
-    if (favoriteRecipes.some((obj) => obj.id === id)) {
+    if (favoriteRecipes.some((obj) => obj && obj.id === id)) {
       setHeartIcon(blackHeartIcon);
     }
     localStorage.setItem('checkedIngredients', JSON.stringify(checkedIngredients));
@@ -170,8 +166,16 @@ function RecipeInProgress() {
         disabled={ checkedIngredients.length !== Object.keys(ingredientsAll).length }
         onClick={ () => {
           const now = new Date().toISOString();
-          const newObjRecipe = {
-            ...objLocalSave(),
+          const mealOrDrink = recipe[0] && recipe[0]
+            .strMeal !== undefined ? 'meal' : 'drink';
+          const newObjRecipe = recipe[0] && {
+            id: recipe[0].idMeal || recipe[0].idDrink,
+            type: mealOrDrink,
+            nationality: recipe[0].strArea || '',
+            category: recipe[0].strCategory,
+            alcoholicOrNot: recipe[0].strAlcoholic || '',
+            name: recipe[0].strDrink || recipe[0].strMeal,
+            image: recipe[0].strMealThumb || recipe[0].strDrinkThumb,
             doneDate: now,
             tags: recipe[0].strTags !== null ? recipe[0].strTags.split(',') : [],
           };
