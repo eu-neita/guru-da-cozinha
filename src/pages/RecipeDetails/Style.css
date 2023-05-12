@@ -1,20 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
 .carousel {
   display: flex;
-  margin-bottom: 20px;
-  overflow-x: scroll;
+  flex-wrap: nowrap;
+  margin: auto;
+  overflow-x: auto;
+  width: 100%;
 }
 
 .carousel-card {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  margin-right: 20px;
+  border: 1px solid red;
+  margin: auto 35px;
+  padding: 10px;
+  width: 100vw;
 }
 
 .carousel-card img {
-  margin-bottom: 10px;
-  max-height: 40vw;
-  width: 80%;
+  width: 660px;
 }
 
 .carousel-card p {
@@ -40,6 +45,7 @@
   align-items: center;
   display: flex;
   flex-direction: column;
+  width: 100vw;
 }
 
 .recipe-photo {
