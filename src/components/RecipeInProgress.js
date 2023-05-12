@@ -164,7 +164,26 @@ function RecipeInProgress() {
       <button
         data-testid="finish-recipe-btn"
         disabled={ checkedIngredients.length !== Object.keys(ingredientsAll).length }
-        onClick={ () => history.push('/done-recipes') }
+        onClick={ () => {
+          const mealOrDrink = recipe[0].strMeal !== undefined ? 'meal' : 'drink';
+          const now = new Date().toISOString();
+          const newObjRecipe = {
+            id: recipe[0].idMeal || recipe[0].idDrink,
+            type: mealOrDrink,
+            doneDate: now,
+            nationality: recipe[0].strArea || '',
+            category: recipe[0].strCategory,
+            alcoholicOrNot: recipe[0].strAlcoholic || '',
+            name: recipe[0].strDrink || recipe[0].strMeal,
+            image: recipe[0].strMealThumb || recipe[0].strDrinkThumb,
+            tags: recipe[0].strTags !== null ? recipe[0].strTags.split(',') : [],
+          };
+          const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
+          doneRecipes.push(newObjRecipe);
+          localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
+          localStorage.setItem('checkedIngredients', JSON.stringify(''));
+          history.push('/done-recipes');
+        } }
       >
         Finish Recipe
       </button>
