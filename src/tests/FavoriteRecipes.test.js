@@ -72,4 +72,28 @@ describe('Testa página Favorite Recipes', () => {
 
     expect(copyMessage).toBeInTheDocument();
   });
+
+  it('Deve mostar ser possível remover uma receita dos favoritos', () => {
+    const fakeFavoriteRecipes = [fakeFavoriteRecipe];
+    const json = JSON.stringify(fakeFavoriteRecipes);
+    localStorage.setItem('favoriteRecipes', json);
+
+    const history = createMemoryHistory({ initialEntries: [favoriteRecipePathname] });
+
+    render(
+      <Router history={ history }>
+        <App />
+      </Router>,
+    );
+
+    const unfavoriteButton = screen.getByTestId('0-horizontal-favorite-btn');
+
+    userEvent.click(unfavoriteButton);
+
+    const storagedFavoriteRecipes = JSON.parse(
+      localStorage.getItem('favoriteRecipes'),
+    );
+
+    expect(storagedFavoriteRecipes).toHaveLength(0);
+  });
 });

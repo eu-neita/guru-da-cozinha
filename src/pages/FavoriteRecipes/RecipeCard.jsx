@@ -5,13 +5,18 @@ import copy from 'clipboard-copy';
 import shareIcon from '../../images/shareIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
 
-function RecipeCard({ recipe, index }) {
+function RecipeCard({ recipe, index, unfavoriteRecipeById }) {
   const [showCopyMessage, setShowCopyMessage] = useState(false);
 
   const handleClickShare = () => {
     const url = `${window.location.origin}/${recipe.type}s/${recipe.id}`;
     copy(url);
     setShowCopyMessage(true);
+  };
+
+  const handleClickUnfavorite = () => {
+    // executar a funcao que tira do array e do localstorage, passando o id da receita
+    unfavoriteRecipeById(recipe.id);
   };
 
   return (
@@ -41,7 +46,11 @@ function RecipeCard({ recipe, index }) {
       >
         <img src={ shareIcon } alt="search icon" />
       </button>
-      <button src={ blackHeartIcon } data-testid={ `${index}-horizontal-favorite-btn` }>
+      <button
+        src={ blackHeartIcon }
+        data-testid={ `${index}-horizontal-favorite-btn` }
+        onClick={ handleClickUnfavorite }
+      >
         <img src={ blackHeartIcon } alt="black heart" />
       </button>
     </div>
@@ -59,6 +68,7 @@ RecipeCard.propTypes = {
     image: propTypes.string,
   }).isRequired,
   index: propTypes.number.isRequired,
+  unfavoriteRecipeById: propTypes.func.isRequired,
 };
 
 export { RecipeCard };
