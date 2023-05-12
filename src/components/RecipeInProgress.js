@@ -54,7 +54,7 @@ function RecipeInProgress() {
     navigator.clipboard.writeText(window.location.href.replace('/in-progress', ''));
     setCopiedIsTrue(true);
   };
-  const handleFavoriteBtn = () => {
+  const objLocalSave = () => {
     const mealOrDrink = recipe[0].strMeal !== undefined ? 'meal' : 'drink';
     const newObj = {
       id: recipe[0].idMeal || recipe[0].idDrink,
@@ -65,6 +65,10 @@ function RecipeInProgress() {
       name: recipe[0].strDrink || recipe[0].strMeal,
       image: recipe[0].strMealThumb || recipe[0].strDrinkThumb,
     };
+    return newObj;
+  };
+  const handleFavoriteBtn = () => {
+    const newObj = objLocalSave();
     if (heartIcon === whiteHeartIcon) {
       setHeartIcon(blackHeartIcon);
     } else {
@@ -165,17 +169,10 @@ function RecipeInProgress() {
         data-testid="finish-recipe-btn"
         disabled={ checkedIngredients.length !== Object.keys(ingredientsAll).length }
         onClick={ () => {
-          const mealOrDrink = recipe[0].strMeal !== undefined ? 'meal' : 'drink';
           const now = new Date().toISOString();
           const newObjRecipe = {
-            id: recipe[0].idMeal || recipe[0].idDrink,
-            type: mealOrDrink,
+            ...objLocalSave(),
             doneDate: now,
-            nationality: recipe[0].strArea || '',
-            category: recipe[0].strCategory,
-            alcoholicOrNot: recipe[0].strAlcoholic || '',
-            name: recipe[0].strDrink || recipe[0].strMeal,
-            image: recipe[0].strMealThumb || recipe[0].strDrinkThumb,
             tags: recipe[0].strTags !== null ? recipe[0].strTags.split(',') : [],
           };
           const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
