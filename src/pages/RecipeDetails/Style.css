@@ -2,70 +2,70 @@
   display: flex;
   margin-bottom: 20px;
   overflow-x: scroll;
-  }
-  
-  .carousel-card {
+}
+
+.carousel-card {
   align-items: center;
   display: flex;
   flex-direction: column;
   margin-right: 20px;
-  }
-  
-  .carousel-card img {
+}
+
+.carousel-card img {
   margin-bottom: 10px;
   max-height: 40vw;
   width: 80%;
-  }
-  
-  .carousel-card p {
+}
+
+.carousel-card p {
   font-size: 14px;
-  }
-  
-  .ingredients-list {
+}
+
+.ingredients-list {
   font-size: 16px;
   margin-bottom: 20px;
-  }
-  
-  .instructions {
+}
+
+.instructions {
   font-size: 16px;
   margin-bottom: 20px;
-  }
-  
-  .recipe-category {
+}
+
+.recipe-category {
   font-size: 18px;
   margin-bottom: 20px;
-  }
-  
-  .recipe-details {
+}
+
+.recipe-details {
   align-items: center;
   display: flex;
   flex-direction: column;
-  }
-  
-  .recipe-photo {
+}
+
+.recipe-photo {
   max-height: 50vw;
   width: 100%;
-  }
-  
-  .recipe-title {
+}
+
+.recipe-title {
   font-size: 24px;
   margin: 20px 0;
-  }
-  
-  .start-recipe-btn {
-  background-color: #ff5f5f;
-  border: none;
+}
+
+.start-recipe-btn {
   bottom: 0;
+  font-size: 18px;
+  position: fixed;
+  background-color: #ff5f5f;
+  width: 100%;
+  border: none;
+  padding: 10px;
   color: white;
   cursor: pointer;
-  font-size: 18px;
-  padding: 10px;
-  position: fixed;
-  width: 100%;
-  }
-  
-  .video {
+}
+
+.video {
   margin-bottom: 20px;
   max-height: 50vw;
   width: 100%;
-  }
+}
