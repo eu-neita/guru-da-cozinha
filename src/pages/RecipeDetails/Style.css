@@ -1,12 +1,12 @@
 .recipe-details {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
 }
 
 .recipe-photo {
-  width: 100%;
   max-height: 50vw;
+  width: 100%;
 }
 
 .recipe-title {
@@ -30,28 +30,28 @@
 }
 
 .video {
-  width: 100%;
-  max-height: 50vw;
   margin-bottom: 20px;
+  max-height: 50vw;
+  width: 100%;
 }
 
 .carousel {
   display: flex;
-  overflow-x: scroll;
   margin-bottom: 20px;
+  overflow-x: scroll;
 }
 
 .carousel-card {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
   margin-right: 20px;
 }
 
 .carousel-card img {
-  width: 80%;
-  max-height: 40vw;
   margin-bottom: 10px;
+  max-height: 40vw;
+  width: 80%;
 }
 
 .carousel-card p {
@@ -59,13 +59,13 @@
 }
 
 .start-recipe-btn {
-  position: fixed;
   bottom: 0;
-  width: 100%;
+  position: fixed;
   font-size: 18px;
-  padding: 10px;
+  width: 100%;
   background-color: #ff5f5f;
-  color: white;
+  padding: 10px;
   border: none;
+  color: white;
   cursor: pointer;
 }
