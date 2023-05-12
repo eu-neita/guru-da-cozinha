@@ -1,6 +1,6 @@
 .recipe-details {
-  display: flex;
   align-items: center;
+  display: flex;
   flex-direction: column;
 }
 
@@ -42,8 +42,8 @@
 }
 
 .carousel-card {
-  display: flex;
   align-items: center;
+  display: flex;
   flex-direction: column;
   margin-right: 20px;
 }
@@ -60,12 +60,12 @@
 
 .start-recipe-btn {
   bottom: 0;
-  position: fixed;
   font-size: 18px;
-  width: 100%;
+  position: fixed;
   background-color: #ff5f5f;
-  padding: 10px;
+  width: 100%;
   border: none;
+  padding: 10px;
   color: white;
   cursor: pointer;
 }
