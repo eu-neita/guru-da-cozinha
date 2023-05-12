@@ -1,6 +1,10 @@
+import Login from '../../components/Login';
+
 function Home() {
   return (
-    <div>oie eu sou o home</div>
+    <div>
+      <Login />
+    </div>
   );
 }
 
