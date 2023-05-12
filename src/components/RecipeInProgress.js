@@ -12,7 +12,6 @@ function RecipeInProgress() {
   const [checkedIngredients, setCheckedIngredients] = useState(
     JSON.parse(localStorage.getItem('checkedIngredients')) || [],
   );
-
   useEffect(() => {
     const fetchRecipe = async () => {
       if (history.location.pathname.includes('drinks')) {
@@ -40,7 +39,6 @@ function RecipeInProgress() {
     }
     setIngredientsAll(ingredients);
   }, [history, id, recipe]);
-
   const handleCheckBox = (ingredientIndex) => {
     const isChecked = checkedIngredients.includes(ingredientIndex);
     if (isChecked) {
@@ -163,7 +161,13 @@ function RecipeInProgress() {
         Share
       </button>
       {copiedIsTrue && <span>Link copied!</span>}
-      <button data-testid="finish-recipe-btn">Finish Recipe</button>
+      <button
+        data-testid="finish-recipe-btn"
+        disabled={ checkedIngredients.length !== Object.keys(ingredientsAll).length }
+        onClick={ () => history.push('/done-recipes') }
+      >
+        Finish Recipe
+      </button>
     </div>
   );
 }
