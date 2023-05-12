@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import hartBtn from '../images/whiteHeartIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import '../styles/recipeInProgress.css';
 
 function RecipeInProgress() {
@@ -11,7 +12,6 @@ function RecipeInProgress() {
   const [checkedIngredients, setCheckedIngredients] = useState(
     JSON.parse(localStorage.getItem('checkedIngredients')) || [],
   );
-
   useEffect(() => {
     const fetchRecipe = async () => {
       if (history.location.pathname.includes('drinks')) {
@@ -39,7 +39,6 @@ function RecipeInProgress() {
     }
     setIngredientsAll(ingredients);
   }, [history, id, recipe]);
-
   const handleCheckBox = (ingredientIndex) => {
     const isChecked = checkedIngredients.includes(ingredientIndex);
     if (isChecked) {
@@ -49,10 +48,44 @@ function RecipeInProgress() {
       setCheckedIngredients([...checkedIngredients, ingredientIndex]);
     }
   };
-
+  const [copiedIsTrue, setCopiedIsTrue] = useState(false);
+  const [heartIcon, setHeartIcon] = useState(whiteHeartIcon);
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href.replace('/in-progress', ''));
+    setCopiedIsTrue(true);
+  };
+  const handleFavoriteBtn = () => {
+    const mealOrDrink = recipe[0].strMeal !== undefined ? 'meal' : 'drink';
+    const newObj = {
+      id: recipe[0].idMeal || recipe[0].idDrink,
+      type: mealOrDrink,
+      nationality: recipe[0].strArea || '',
+      category: recipe[0].strCategory,
+      alcoholicOrNot: recipe[0].strAlcoholic || '',
+      name: recipe[0].strDrink || recipe[0].strMeal,
+      image: recipe[0].strMealThumb || recipe[0].strDrinkThumb,
+    };
+    if (heartIcon === whiteHeartIcon) {
+      setHeartIcon(blackHeartIcon);
+    } else {
+      setHeartIcon(whiteHeartIcon);
+    }
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    if (favoriteRecipes.some((obj) => obj.id === id)) {
+      const updateFavoriteRecipes = favoriteRecipes.filter((obj) => obj.id !== id);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(updateFavoriteRecipes));
+    } else {
+      favoriteRecipes.push(newObj);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
+    }
+  };
   useEffect(() => {
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    if (favoriteRecipes.some((obj) => obj.id === id)) {
+      setHeartIcon(blackHeartIcon);
+    }
     localStorage.setItem('checkedIngredients', JSON.stringify(checkedIngredients));
-  }, [checkedIngredients]);
+  }, [checkedIngredients, id]);
   return (
     <div>
       {history.location.pathname.includes('meals')
@@ -63,18 +96,7 @@ function RecipeInProgress() {
               alt={ recipe[0].strMeal }
               data-testid="recipe-photo"
             />
-
             <span data-testid="recipe-title">{ recipe[0].strMeal }</span>
-
-            <button
-              data-testid="share-btn"
-            >
-              Share
-            </button>
-
-            <button data-testid="favorite-btn">
-              <img src={ hartBtn } alt="favorite Icon" />
-            </button>
 
             <span data-testid="recipe-category">{ recipe[0].strCategory }</span>
             <span data-testid="instructions">{ recipe[0].strInstructions }</span>
@@ -103,19 +125,7 @@ function RecipeInProgress() {
               alt={ recipe[0].strDrink }
               data-testid="recipe-photo"
             />
-
             <span data-testid="recipe-title">{ recipe[0].strDrink }</span>
-
-            <button
-              data-testid="share-btn"
-            >
-              Share
-            </button>
-
-            <button data-testid="favorite-btn">
-              <img src={ hartBtn } alt="favorite Icon" />
-            </button>
-
             <span data-testid="recipe-category">{ recipe[0].strCategory }</span>
             <span data-testid="instructions">{ recipe[0].strInstructions }</span>
             {Object.keys(ingredientsAll).map((ingredient, index) => (
@@ -136,7 +146,28 @@ function RecipeInProgress() {
             ))}
           </div>
         )}
-      <button data-testid="finish-recipe-btn">Finish Recipe</button>
+
+      <button onClick={ handleFavoriteBtn }>
+        <img
+          src={ heartIcon }
+          data-testid="favorite-btn"
+          alt="blackHeartIcon"
+        />
+      </button>
+      <button
+        data-testid="share-btn"
+        onClick={ handleCopyLink }
+      >
+        Share
+      </button>
+      {copiedIsTrue && <span>Link copied!</span>}
+      <button
+        data-testid="finish-recipe-btn"
+        disabled={ checkedIngredients.length !== Object.keys(ingredientsAll).length }
+        onClick={ () => history.push('/done-recipes') }
+      >
+        Finish Recipe
+      </button>
     </div>
   );
 }

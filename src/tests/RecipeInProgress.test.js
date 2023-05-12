@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import RecipeInProgress from '../components/RecipeInProgress';
 
@@ -27,6 +27,8 @@ describe('RecipeInProgress', () => {
       strIngredient7: 'basil',
       strMeasure7: '1 handful',
     };
+    const clipboard = { writeText: jest.fn() };
+    Object.assign(navigator, { clipboard });
     jest.spyOn(global, 'fetch').mockResolvedValue({
       json: jest.fn().mockResolvedValue({
         meals: [recipeData],
@@ -57,6 +59,13 @@ describe('RecipeInProgress', () => {
     expect(screen.getByTestId('instructions')).toHaveTextContent(instruction);
 
     global.fetch.mockRestore();
+    const shareBtn = screen.getByTestId('share-btn');
+    // const spanText = screen.getByText('Link copied!');
+    fireEvent.click(shareBtn);
+
+    waitFor(() => {
+      expect(clipboard.writeText).toHaveBeenCalledWith('http://localhost:3000/meals/52771');
+    });
   });
 
   test('renders drink recipe when URL includes /drinks/', async () => {
@@ -99,11 +108,11 @@ describe('RecipeInProgress', () => {
       'src',
       recipeData.strDrinkThumb,
     );
-    expect(screen.getByTestId('recipe-title')).toHaveTextContent(recipeData.idDrink);
+    expect(screen.getByTestId('recipe-title')).toHaveTextContent('Aquamarine');
     expect(screen.getByTestId('recipe-category')).toHaveTextContent(
       recipeData.strCategory,
     );
-    expect(screen.getByTestId('instructions')).toHaveTextContent('Put a large saucepan of water on to boil.');
+    expect(screen.getByTestId('instructions')).toHaveTextContent('Pour vodka, blue curacao and lemon juice into a cocktail shaker.');
 
     global.fetch.mockRestore();
   });
