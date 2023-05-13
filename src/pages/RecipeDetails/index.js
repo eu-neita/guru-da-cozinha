@@ -82,6 +82,32 @@ export default function RecipeDetails() {
     push(route);
   };
 
+  const shareButton = (
+    <button
+      type="button"
+      data-testid="share-btn"
+      className="share-btn"
+      onClick={ () => {
+        console.log('Share button clicked');
+      } }
+    >
+      Share
+    </button>
+  );
+
+  const favoriteButton = (
+    <button
+      type="button"
+      data-testid="favorite-btn"
+      className="favorite-btn"
+      onClick={ () => {
+        console.log('Favorite button clicked');
+      } }
+    >
+      Favorite
+    </button>
+  );
+
   return (
     <div className="recipe-details">
       <img
@@ -90,6 +116,7 @@ export default function RecipeDetails() {
         data-testid="recipe-photo"
         className="recipe-photo"
       />
+      {favoriteButton}
       <h2
         data-testid="recipe-title"
         className="recipe-title"
@@ -123,6 +150,7 @@ export default function RecipeDetails() {
           className="video"
         />
       )}
+      {shareButton}
       <section className="carousel">
         {
           recommendations?.slice(0, seis).map((suggestion, index) => (
