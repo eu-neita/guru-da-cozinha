@@ -1,12 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
+import copy from 'clipboard-copy';
 import './Style.css';
+import shareIcon from '../../images/shareIcon.svg';
 
 export default function RecipeDetails() {
   const { location: { pathname }, push } = useHistory();
   const [buttonText, setButtonText] = useState('Start Recipe');
   const [hideButton, setHideButton] = useState(false);
-
+  const [linkCopied, setLinkCopied] = useState(false);
   const [recipeData, setRecipeData] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const isMeal = pathname.includes('meals');
@@ -14,6 +16,7 @@ export default function RecipeDetails() {
   const vinte = 20;
   const menosOnze = -11;
   const seis = 6;
+  const doisMil = 2000;
 
   const getEndPoint = (path, id) => ({
     endPoint: `https://www.${path.includes('drinks') ? 'thecocktaildb' : 'themealdb'}.com/api/json/v1/1/lookup.php?i=${id}`,
@@ -82,16 +85,25 @@ export default function RecipeDetails() {
     push(route);
   };
 
+  console.log('id:', recipe.idMeal);
+
   const shareButton = (
     <button
       type="button"
       data-testid="share-btn"
       className="share-btn"
       onClick={ () => {
-        console.log('Share button clicked');
+        copy(window.location.href);
+        setLinkCopied(true);
+        setTimeout(() => {
+          setLinkCopied(false);
+        }, doisMil);
       } }
     >
-      Share
+      <img
+        src={ shareIcon }
+        alt="Share"
+      />
     </button>
   );
 
@@ -117,6 +129,8 @@ export default function RecipeDetails() {
         className="recipe-photo"
       />
       {favoriteButton}
+      {shareButton}
+      {linkCopied && <span>Link copied!</span>}
       <h2
         data-testid="recipe-title"
         className="recipe-title"
@@ -142,6 +156,7 @@ export default function RecipeDetails() {
         ))}
       </ul>
       <p data-testid="instructions" className="instructions">{recipe.strInstructions}</p>
+
       {isMeal && (
         <iframe
           src={ `https://www.youtube.com/embed/${recipe.strYoutube.slice(menosOnze)}` }
@@ -150,7 +165,6 @@ export default function RecipeDetails() {
           className="video"
         />
       )}
-      {shareButton}
       <section className="carousel">
         {
           recommendations?.slice(0, seis).map((suggestion, index) => (
