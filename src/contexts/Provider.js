@@ -6,6 +6,7 @@ function Provider({ children }) {
   // estado inicial - dados que vêm da API
   const [recipes, setRecipes] = useState([]);
   const [filterData, setFilterData] = useState([]);
+  const [favoriteRecipes, setFavoriteRecipes] = useState([]);
   // trouxe o array de recipes para o escopo global, pois será atualizado de acordo com os
   // filtros do componentes searchBar
 
@@ -14,11 +15,15 @@ function Provider({ children }) {
     setRecipes,
     filterData,
     setFilterData,
+    favoriteRecipes,
+    setFavoriteRecipes,
   }), [
     recipes,
     setRecipes,
     filterData,
     setFilterData,
+    favoriteRecipes,
+    setFavoriteRecipes,
   ]);
 
   return (

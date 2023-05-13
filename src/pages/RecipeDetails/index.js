@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import copy from 'clipboard-copy';
 import './Style.css';
 import shareIcon from '../../images/shareIcon.svg';
+import { recipeFormat } from '../../services/RecipeLocalStorage';
 
 export default function RecipeDetails() {
   const { location: { pathname }, push } = useHistory();
@@ -11,6 +12,7 @@ export default function RecipeDetails() {
   const [linkCopied, setLinkCopied] = useState(false);
   const [recipeData, setRecipeData] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
+  const [favoriteRecipes, setFavoriteRecipes] = useState([]);
   const isMeal = pathname.includes('meals');
 
   const vinte = 20;
@@ -85,7 +87,34 @@ export default function RecipeDetails() {
     push(route);
   };
 
-  console.log('id:', recipe.idMeal);
+  const addFavoriteRecipe = (r) => {
+    const newFavoriteRecipes = [...favoriteRecipes, r];
+    setFavoriteRecipes(newFavoriteRecipes);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newFavoriteRecipes));
+  };
+
+  const removeFavoriteRecipe = (id) => {
+    const newFavoriteRecipes = favoriteRecipes.filter((r) => r.id !== id);
+    setFavoriteRecipes(newFavoriteRecipes);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newFavoriteRecipes));
+  };
+
+  const isFavoriteRecipe = (id) => favoriteRecipes
+    .some((r) => r.id === id);
+
+  const handleFavoriteClick = () => {
+    const id = isMeal ? recipe.idMeal : recipe.idDrink;
+    const recipeToSaveOnLocalStorage = recipeFormat(recipe, pathname);
+    if (isFavoriteRecipe(id)) {
+      removeFavoriteRecipe(id);
+    } else {
+      addFavoriteRecipe(recipeToSaveOnLocalStorage);
+    }
+  };
+
+  const localStorageFavoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+
+  console.log(localStorageFavoriteRecipes);
 
   const shareButton = (
     <button
@@ -112,9 +141,7 @@ export default function RecipeDetails() {
       type="button"
       data-testid="favorite-btn"
       className="favorite-btn"
-      onClick={ () => {
-        console.log('Favorite button clicked');
-      } }
+      onClick={ handleFavoriteClick }
     >
       Favorite
     </button>
