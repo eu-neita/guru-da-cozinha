@@ -3,12 +3,17 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Meals from '../pages/Meals';
 import Drinks from '../pages/Drinks';
+import Provider from '../contexts/Provider';
 import { renderWithRouter } from '../services/helpers/renderWith';
 
 describe('Recipes component', () => {
   describe('Meals', () => {
     test('Teste se os componentes são renderizados na pagina Meals', async () => {
-      renderWithRouter(<Meals />);
+      renderWithRouter(
+        <Provider>
+          <Meals />
+        </Provider>,
+      );
 
       await waitFor(() => {
         const corba = screen.getByRole('heading', { name: /corba/i });
@@ -20,7 +25,11 @@ describe('Recipes component', () => {
     });
 
     test('Teste os filtros na pagina Meals', async () => {
-      renderWithRouter(<Meals />);
+      renderWithRouter(
+        <Provider>
+          <Meals />
+        </Provider>,
+      );
 
       await waitFor(() => {
         const beef = screen.getByRole('button', { name: /beef/i });
@@ -64,7 +73,11 @@ describe('Recipes component', () => {
 
   describe('Drinks', () => {
     test('Teste se os componentes são renderizados na pagina Drinks', async () => {
-      renderWithRouter(<Drinks />);
+      renderWithRouter(
+        <Provider>
+          <Drinks />
+        </Provider>,
+      );
 
       await waitFor(() => {
         const gg = screen.getByRole('heading', { name: /gg/i });
@@ -76,7 +89,11 @@ describe('Recipes component', () => {
     });
 
     test('Teste os filtros na pagina Drinks', async () => {
-      renderWithRouter(<Drinks />);
+      renderWithRouter(
+        <Provider>
+          <Drinks />
+        </Provider>,
+      );
 
       await waitFor(() => {
         const cocoa = screen.getByRole('button', { name: /cocoa/i });
