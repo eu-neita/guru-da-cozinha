@@ -8,7 +8,7 @@ const instruction = 'Put a large saucepan of water on to boil.';
 const ingredientStep = '0-ingredient-step';
 const ingredientStep1 = '1-ingredient-step';
 const ingredientStep2 = '2-ingredient-step';
-const ingredientStep3 = '3-ingredient-step';
+// const ingredientStep3 = '3-ingredient-step';
 describe('RecipeInProgress', () => {
   test('renders recipe photo, title, share and favorite buttons, category, instructions and ingredients checkboxes', async () => {
     const recipeData = {
@@ -64,11 +64,14 @@ describe('RecipeInProgress', () => {
     expect(screen.getByTestId('instructions')).toHaveTextContent(instruction);
 
     expect(screen.getByTestId(ingredientStep)).toBeInTheDocument();
-    expect(screen.getByTestId('0-ingredient-step')).toHaveTextContent(recipeData.strIngredient1);
-    expect(screen.getByTestId('1-ingredient-step')).toBeInTheDocument();
-    expect(screen.getByTestId('1-ingredient-step')).toHaveTextContent(recipeData.strIngredient2);
-    expect(screen.getByTestId('2-ingredient-step')).toBeInTheDocument();
-    expect(screen.getByTestId('2-ingredient-step')).toHaveTextContent(recipeData.strIngredient3);
+    expect(screen.getByTestId(ingredientStep))
+      .toHaveTextContent(recipeData.strIngredient1);
+    expect(screen.getByTestId(ingredientStep1)).toBeInTheDocument();
+    expect(screen.getByTestId(ingredientStep1))
+      .toHaveTextContent(recipeData.strIngredient2);
+    expect(screen.getByTestId(ingredientStep2)).toBeInTheDocument();
+    expect(screen.getByTestId(ingredientStep2))
+      .toHaveTextContent(recipeData.strIngredient3);
 
     global.fetch.mockRestore();
     const shareBtn = screen.getByTestId('share-btn');
