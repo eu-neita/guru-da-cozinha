@@ -1,34 +1,73 @@
 import { useContext, useState } from 'react';
+import propTypes from 'prop-types';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import Context from '../contexts/Context';
 
-function SearchBar() {
-  // const { data, filterData, setFilterData, recipes, setRecipes } = useContext(Context);
-  const { setFilterData } = useContext(Context);
+function SearchBar({ type }) {
+  const { setFilterData, setRecipes } = useContext(Context);
   const [searchInput, setSearchInput] = useState('');
   const [valueInput, setValueInput] = useState('');
 
+  const { push } = useHistory();
+
+  const verifyResults = (foundRecipes) => {
+    if (foundRecipes === null) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    } else if (foundRecipes.length === 1) {
+      const recipeId = type === 'drinks'
+        ? foundRecipes[0].idDrink
+        : foundRecipes[0].idMeal;
+      push(`/${type}/${recipeId}`);
+    } else {
+      setFilterData(foundRecipes);
+      setRecipes(foundRecipes);
+    }
+  };
+
+  // const verifyLengthResults = (results) => {
+  //   if (searchType === 'Meals' && results.meals.length === 1) {
+  //     return verifyResults();
+  //   }
+  //   if (searchType === 'Drinks' && results.drinks.length === 1) {
+  //     return verifyResults();
+  //   }
+  //   setFilterData(results);
+  // };
+
   const getIngredient = async () => {
-    const fetchAPI = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchInput}`);
-    const { results } = await fetchAPI.json();
-    setFilterData(results);
+    const url = type === 'drinks'
+      ? `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchInput}`
+      : `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchInput}`;
+    const fetchAPI = await fetch(url);
+    const data = await fetchAPI.json();
+    const foundRecipes = data[type];
+
+    verifyResults(foundRecipes);
   };
 
   const getName = async () => {
-    const fetchAPI = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchInput}`);
-    const { results } = await fetchAPI.json();
-    setFilterData(results);
+    const url = type === 'drinks'
+      ? `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchInput}`
+      : `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchInput}`;
+    const fetchAPI = await fetch(url);
+    const data = await fetchAPI.json();
+    const foundRecipes = data[type];
+
+    verifyResults(foundRecipes);
   };
 
   const getFirstLetter = async () => {
-    const fetchAPI = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${searchInput}`);
-    const { results } = await fetchAPI.json();
-    setFilterData(results);
+    const url = type === 'drinks'
+      ? `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${searchInput}`
+      : `https://www.themealdb.com/api/json/v1/1/search.php?f=${searchInput}`;
+    const fetchAPI = await fetch(url);
+    const data = await fetchAPI.json();
+    const foundRecipes = data[type];
+
+    verifyResults(foundRecipes);
   };
 
-  const handleClick = () => {
-    if (searchInput.length > 1) {
-      global.alert('Your search must have only 1 (one) character');
-    }
+  const verifyRadioButton = () => {
     switch (valueInput) {
     case 'ingredient':
       return getIngredient();
@@ -39,6 +78,34 @@ function SearchBar() {
     default:
       return null;
     }
+  };
+
+  const verifyFirstLetter = () => {
+    if (valueInput === 'firstLetter' && searchInput.length > 1) {
+      global.alert('Your search must have only 1 (one) character');
+    }
+  };
+
+  const checkValuesToFetch = async () => {
+    verifyRadioButton();
+    verifyFirstLetter();
+  };
+
+  const handleClick = () => {
+    checkValuesToFetch();
+    // if (valueInput === 'firstLetter' && searchInput.length > 1) {
+    //   global.alert('Your search must have only 1 (one) character');
+    // }
+    // switch (valueInput) {
+    // case 'ingredient':
+    //   return getIngredient();
+    // case 'name':
+    //   return getName();
+    // case 'firstLetter':
+    //   return getFirstLetter();
+    // default:
+    //   return null;
+    // }
   };
 
   return (
@@ -86,5 +153,9 @@ function SearchBar() {
     </div>
   );
 }
+
+SearchBar.propTypes = {
+  type: propTypes.string.isRequired,
+};
 
 export default SearchBar;
