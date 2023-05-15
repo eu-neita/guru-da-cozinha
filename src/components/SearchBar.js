@@ -61,6 +61,7 @@ function SearchBar({ type }) {
       ? `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${searchInput}`
       : `https://www.themealdb.com/api/json/v1/1/search.php?f=${searchInput}`;
     const fetchAPI = await fetch(url);
+    console.log('fetchapi', fetchAPI);
     const data = await fetchAPI.json();
     const foundRecipes = data[type];
 
@@ -80,22 +81,23 @@ function SearchBar({ type }) {
     }
   };
 
-  const verifyFirstLetter = () => {
-    if (valueInput === 'firstLetter' && searchInput.length > 1) {
-      global.alert('Your search must have only 1 (one) character');
-    }
-  };
+  // const verifyFirstLetter = () => {
+  //   if (valueInput === 'firstLetter' && searchInput.length > 1) {
+  //     return global.alert('Your search must have only 1 (one) character');
+  //   }
+  // };
 
   const checkValuesToFetch = async () => {
     verifyRadioButton();
-    verifyFirstLetter();
+    // verifyFirstLetter();
   };
 
   const handleClick = () => {
+    if (valueInput === 'firstLetter' && searchInput.length > 1) {
+      return global.alert('Your search must have only 1 (one) character');
+    }
     checkValuesToFetch();
-    // if (valueInput === 'firstLetter' && searchInput.length > 1) {
-    //   global.alert('Your search must have only 1 (one) character');
-    // }
+
     // switch (valueInput) {
     // case 'ingredient':
     //   return getIngredient();

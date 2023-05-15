@@ -7,6 +7,10 @@ import fakeFetch from '../../cypress/mocks/fetch';
 
 import App from '../App';
 
+const btnSearch = 'search-top-btn';
+const schInput = 'search-input';
+const execBtn = 'exec-search-btn';
+
 describe('Testa componente SearchBar', () => {
   it('Verifica se o input-search é renderizado após o click no botão de pesquisa', () => {});
 
@@ -18,10 +22,10 @@ describe('Testa componente SearchBar', () => {
       </Provider>,
       { initialEntries: ['/meals'] },
     );
-    const searchButton = screen.getByTestId('search-top-btn');
+    const searchButton = screen.getByTestId(btnSearch);
     userEvent.click(searchButton);
-    const searchInput = screen.getByTestId('search-input');
-    const execSearchButton = screen.getByTestId('exec-search-btn');
+    const searchInput = screen.getByTestId(schInput);
+    const execSearchButton = screen.getByTestId(execBtn);
     const ingredientSearchRadio = screen.getByTestId('ingredient-search-radio');
     userEvent.type(searchInput, 'Chicken');
     userEvent.click(ingredientSearchRadio);
@@ -37,10 +41,10 @@ describe('Testa componente SearchBar', () => {
       </Provider>,
       { initialEntries: ['/drinks'] },
     );
-    const searchButton = screen.getByTestId('search-top-btn');
+    const searchButton = screen.getByTestId(btnSearch);
     userEvent.click(searchButton);
-    const searchInput = screen.getByTestId('search-input');
-    const execSearchButton = screen.getByTestId('exec-search-btn');
+    const searchInput = screen.getByTestId(schInput);
+    const execSearchButton = screen.getByTestId(execBtn);
     const ingredientSearchRadio = screen.getByTestId('ingredient-search-radio');
     userEvent.type(searchInput, 'Light rum');
     userEvent.click(ingredientSearchRadio);
@@ -56,10 +60,10 @@ describe('Testa componente SearchBar', () => {
       </Provider>,
       { initialEntries: ['/meals'] },
     );
-    const searchButton = screen.getByTestId('search-top-btn');
+    const searchButton = screen.getByTestId(btnSearch);
     userEvent.click(searchButton);
-    const searchInput = screen.getByTestId('search-input');
-    const execSearchButton = screen.getByTestId('exec-search-btn');
+    const searchInput = screen.getByTestId(schInput);
+    const execSearchButton = screen.getByTestId(execBtn);
     const nameSearchRadio = screen.getByTestId('name-search-radio');
     userEvent.type(searchInput, 'soup');
     userEvent.click(nameSearchRadio);
@@ -75,10 +79,10 @@ describe('Testa componente SearchBar', () => {
       </Provider>,
       { initialEntries: ['/drinks'] },
     );
-    const searchButton = screen.getByTestId('search-top-btn');
+    const searchButton = screen.getByTestId(btnSearch);
     userEvent.click(searchButton);
-    const searchInput = screen.getByTestId('search-input');
-    const execSearchButton = screen.getByTestId('exec-search-btn');
+    const searchInput = screen.getByTestId(schInput);
+    const execSearchButton = screen.getByTestId(execBtn);
     const nameSearchRadio = screen.getByTestId('name-search-radio');
     userEvent.type(searchInput, 'Aquamarine');
     userEvent.click(nameSearchRadio);
