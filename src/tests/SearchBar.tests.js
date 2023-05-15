@@ -15,9 +15,7 @@ describe('Testa componente SearchBar', () => {
   const nameSearchRadio = screen.getByTestId('name-search-radio');
   const firstLetter = screen.getByTestId('first-letter-search-radio');
 
-  it('Verifica se o input-search é renderizado após o click no botão de pesquisa', () => {
-
-  });
+  it('Verifica se o input-search é renderizado após o click no botão de pesquisa', () => {});
 
   it('Deve ser possível buscar as receitas de refeições por ingrediente', () => {
     jest.spyOn(global, 'fetch').mockImplementation(fakeFetch);
