@@ -138,4 +138,16 @@ describe('Header component', () => {
     );
     expect(getByTestId(profileBtn)).toBeInTheDocument();
   });
+
+  test('test null', () => {
+    const { queryByTestId } = renderWithRouter(
+      <Provider>
+        <MemoryRouter initialEntries={ ['/abc'] }>
+          <Header />
+        </MemoryRouter>
+        ,
+      </Provider>,
+    );
+    expect(queryByTestId(profileBtn)).not.toBeInTheDocument();
+  });
 });
