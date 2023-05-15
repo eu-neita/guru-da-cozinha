@@ -1,29 +1,42 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent, wait } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import DrinksHeader from '../../pages/Drinks/DrinksHeader';
+import { renderWithRouter } from '../../services/helpers/renderWith';
+import Provider from '../../contexts/Provider';
 
 describe('DrinksHeader', () => {
-  test('renders DrinksHeader correctly', () => {
-    render(
-      <MemoryRouter>
-        <DrinksHeader />
-      </MemoryRouter>,
+  test('renders DrinksHeader correctly', async () => {
+    const { getByTestId } = renderWithRouter(
+      <Provider>
+        <MemoryRouter>
+          <DrinksHeader />
+        </MemoryRouter>
+      </Provider>,
     );
+    // render(
+    //   <MemoryRouter>
+    //     <DrinksHeader />
+    //   </MemoryRouter>,
+    // );
 
-    expect(screen.getByTestId('page-title')).toHaveTextContent('Drinks');
-    expect(screen.getByTestId('profile-top-btn')).toBeInTheDocument();
-    expect(screen.getByTestId('search-top-btn')).toBeInTheDocument();
+    await wait(expect(getByTestId('page-title')).toHaveTextContent('Drinks'));
+    expect(getByTestId('profile-top-btn')).toBeInTheDocument();
+    expect(getByTestId('search-top-btn')).toBeInTheDocument();
   });
 
   test('clicking profile icon should push to profile page', () => {
+    const value = 1;
     const historyMock = { push: jest.fn() };
     jest.spyOn(historyMock, 'push');
-    jest.spyOn(1, 'useHistory').mockReturnValue(historyMock);
+    jest.spyOn(value, 'useHistory').mockReturnValue(historyMock);
 
-    render(
-      <MemoryRouter>
-        <DrinksHeader />
-      </MemoryRouter>,
+    renderWithRouter(
+      <Provider>
+        <MemoryRouter>
+          <DrinksHeader />
+        </MemoryRouter>
+        ,
+      </Provider>,
     );
 
     const profileBtn = screen.getByTestId('profile-top-btn');
@@ -33,10 +46,14 @@ describe('DrinksHeader', () => {
   });
 
   test('search input should be hidden by default', () => {
-    render(
-      <MemoryRouter>
-        <DrinksHeader />
-      </MemoryRouter>,
+    renderWithRouter(
+      <Provider>
+        <MemoryRouter>
+          <DrinksHeader />
+        </MemoryRouter>
+        ,
+
+      </Provider>,
     );
 
     const searchInput = screen.queryByTestId('search-input');
@@ -44,10 +61,14 @@ describe('DrinksHeader', () => {
   });
 
   test('clicking search icon should toggle search input visibility', () => {
-    render(
-      <MemoryRouter>
-        <DrinksHeader />
-      </MemoryRouter>,
+    renderWithRouter(
+      <Provider>
+        <MemoryRouter>
+          <DrinksHeader />
+        </MemoryRouter>
+        ,
+
+      </Provider>,
     );
 
     const searchBtn = screen.getByTestId('search-top-btn');

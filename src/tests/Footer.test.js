@@ -1,29 +1,45 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
+import { renderWithRouter } from '../services/helpers/renderWith';
 import Drinks from '../pages/Drinks';
 import Meals from '../pages/Meals';
 import Profile from '../pages/Profile';
 import App from '../App';
+import Provider from '../contexts/Provider';
 
 describe('testa component Footer', () => {
   test('testa se footer aparece na pagina Drinks', () => {
-    render(<Drinks />);
+    renderWithRouter(
+      <Provider>
+        <Drinks />
+      </Provider>,
+    );
     const buttonDrinks = screen.getByRole('button', { name: /drinks icon/i });
     const buttonMeals = screen.getByRole('button', { name: /meals icon/i });
     expect(buttonDrinks).toBeInTheDocument();
     expect(buttonMeals).toBeInTheDocument();
   });
   test('testa se footer aparece na pagina Meals', () => {
-    render(<Meals />);
+    renderWithRouter(
+      <Provider>
+        <Meals />
+      </Provider>,
+    );
+
     const buttonDrinks = screen.getByRole('button', { name: /drinks icon/i });
     const buttonMeals = screen.getByRole('button', { name: /meals icon/i });
     expect(buttonDrinks).toBeInTheDocument();
     expect(buttonMeals).toBeInTheDocument();
   });
   test('testa se footer aparece na pagina Profile', () => {
-    render(<Profile />);
+    renderWithRouter(
+      <Provider>
+        <Profile />
+      </Provider>,
+    );
+
     const buttonDrinks = screen.getByRole('button', { name: /drinks icon/i });
     const buttonMeals = screen.getByRole('button', { name: /meals icon/i });
     expect(buttonDrinks).toBeInTheDocument();
@@ -38,10 +54,14 @@ describe('testa component Footer', () => {
 
 describe('testa se ao clicar em um dos botoẽs é redirecionado para pagina certa', () => {
   test('teste se a partir da pagina drinks ao clicar no botão meals icon ele muda para pagina Meals', async () => {
-    render(
-      <MemoryRouter initialEntries={ ['/drinks'] }>
-        <App />
-      </MemoryRouter>,
+    renderWithRouter(
+      <Provider>
+        <MemoryRouter initialEntries={ ['/drinks'] }>
+          <App />
+        </MemoryRouter>
+        ,
+
+      </Provider>,
     );
     const buttonMeals = screen.getByRole('button', { name: /meals icon/i });
     expect(buttonMeals).toBeInTheDocument();
@@ -50,10 +70,13 @@ describe('testa se ao clicar em um dos botoẽs é redirecionado para pagina cer
     expect(text).toBeInTheDocument();
   });
   test('teste se a partir da pagina drinks ao clicar no botão meals icon ele muda para pagina Meals', async () => {
-    render(
-      <MemoryRouter initialEntries={ ['/meals'] }>
-        <App />
-      </MemoryRouter>,
+    renderWithRouter(
+      <Provider>
+        <MemoryRouter initialEntries={ ['/meals'] }>
+          <App />
+        </MemoryRouter>
+        ,
+      </Provider>,
     );
     const buttonDrinks = screen.getByRole('button', { name: /drinks icon/i });
     expect(buttonDrinks).toBeInTheDocument();
