@@ -1,6 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import { useHistory } from 'react-router-dom';
+import { renderWithRouter } from '../../services/helpers/renderWith';
 import HomeHeader from '../../pages/Home/HomeHeader';
 
 const profileBtn = 'profile-top-btn';
@@ -22,7 +23,7 @@ describe('HomeHeader', () => {
   });
 
   it('renders profile and search icons', () => {
-    render(<HomeHeader />);
+    renderWithRouter(<HomeHeader />);
     const profileIcon = screen.getByTestId(profileBtn);
     const searchIcon = screen.getByTestId(searchTopBtn);
 
@@ -31,7 +32,7 @@ describe('HomeHeader', () => {
   });
 
   it('renders search input when search icon is clicked', () => {
-    render(<HomeHeader />);
+    renderWithRouter(<HomeHeader />);
     const searchIcon = screen.getByTestId(searchTopBtn);
     fireEvent.click(searchIcon);
     const searchInput = screen.getByTestId('search-input');
@@ -40,7 +41,7 @@ describe('HomeHeader', () => {
   });
 
   it('redirects to profile page when profile icon is clicked', () => {
-    render(<HomeHeader />);
+    renderWithRouter(<HomeHeader />);
     const profileIcon = screen.getByTestId(profileBtn);
     fireEvent.click(profileIcon);
 
@@ -48,7 +49,7 @@ describe('HomeHeader', () => {
   });
 
   it('toggles search input when search icon is clicked twice', () => {
-    render(<HomeHeader />);
+    renderWithRouter(<HomeHeader />);
     const searchIcon = screen.getByTestId('search-top-btn');
     fireEvent.click(searchIcon);
     fireEvent.click(searchIcon);

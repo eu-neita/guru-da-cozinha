@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import fetchApiData from '../services/fetchRecipes';
 import '../styles/Recipes.css';
 import fetchCategoryData from '../services/fetchCategory';
 import { fetchFilterMeal, fetchFilterDrink } from '../services/fetchFilter';
+import Context from '../contexts/Context';
 
 function Recipes({ value }) {
-  const [recipes, setRecipes] = useState([]);
+  const { recipes, setRecipes } = useContext(Context);
   const [category, setCategory] = useState([]);
   const [recipesByCategory, setRecipesByCategory] = useState([]);
   const [filter, setFilter] = useState('');
@@ -23,7 +24,7 @@ function Recipes({ value }) {
     };
     fetchRecipes();
     fetchCategory();
-  }, [value]);
+  }, [value, setRecipes]);
 
   const MAX_RECIPES = 12;
   let results = recipes.slice(0, MAX_RECIPES);

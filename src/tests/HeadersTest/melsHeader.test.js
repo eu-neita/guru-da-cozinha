@@ -1,16 +1,20 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Router } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import MealsHeader from '../../pages/Meals/MealsHeader';
+import { renderWithRouter } from '../../services/helpers/renderWith';
+import Provider from '../../contexts/Provider';
 
 const searchInputva = 'search-input';
 
 test('renders profile button that redirects to profile page', () => {
   const history = createMemoryHistory();
-  render(
+  renderWithRouter(
     <Router history={ history }>
-      <MealsHeader />
+      <Provider>
+        <MealsHeader />
+      </Provider>
     </Router>,
   );
   const profileButton = screen.getByTestId('profile-top-btn');
@@ -23,10 +27,13 @@ test('renders profile button that redirects to profile page', () => {
 
 describe('MealsHeader', () => {
   test('renders the page title', () => {
-    render(
-      <MemoryRouter>
-        <MealsHeader />
-      </MemoryRouter>,
+    renderWithRouter(
+      <Provider>
+        <MemoryRouter>
+          <MealsHeader />
+        </MemoryRouter>
+        ,
+      </Provider>,
     );
 
     expect(screen.getByTestId('page-title')).toBeInTheDocument();
@@ -34,10 +41,13 @@ describe('MealsHeader', () => {
   });
 
   test('renders the profile button', () => {
-    render(
-      <MemoryRouter>
-        <MealsHeader />
-      </MemoryRouter>,
+    renderWithRouter(
+      <Provider>
+        <MemoryRouter>
+          <MealsHeader />
+        </MemoryRouter>
+        ,
+      </Provider>,
     );
 
     const profileBtn = screen.getByTestId('profile-top-btn');
@@ -47,10 +57,13 @@ describe('MealsHeader', () => {
   });
 
   test('renders the search button', () => {
-    render(
-      <MemoryRouter>
-        <MealsHeader />
-      </MemoryRouter>,
+    renderWithRouter(
+      <Provider>
+        <MemoryRouter>
+          <MealsHeader />
+        </MemoryRouter>
+        ,
+      </Provider>,
     );
 
     const searchBtn = screen.getByTestId('search-top-btn');
@@ -60,20 +73,26 @@ describe('MealsHeader', () => {
   });
 
   test('does not render search input by default', () => {
-    render(
-      <MemoryRouter>
-        <MealsHeader />
-      </MemoryRouter>,
+    renderWithRouter(
+      <Provider>
+        <MemoryRouter>
+          <MealsHeader />
+        </MemoryRouter>
+        ,
+      </Provider>,
     );
 
     expect(screen.queryByTestId(searchInputva)).not.toBeInTheDocument();
   });
 
   test('renders search input when search button is clicked', () => {
-    render(
-      <MemoryRouter>
-        <MealsHeader />
-      </MemoryRouter>,
+    renderWithRouter(
+      <Provider>
+        <MemoryRouter>
+          <MealsHeader />
+        </MemoryRouter>
+        ,
+      </Provider>,
     );
 
     const searchBtn = screen.getByTestId('search-top-btn');

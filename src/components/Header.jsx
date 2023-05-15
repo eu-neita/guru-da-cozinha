@@ -9,8 +9,7 @@ import FavoriteRecipesHeader from '../pages/FavoriteRecipes/FavoriteRecipesHeade
 function Header() {
   const { pathname } = useLocation();
   // se for algo que contenha id da receita ou inprogress ele usa o mesmo componente do home
-  const onIncludes = pathname.includes(':id-da-receita')
-      || pathname.includes('in-progress');
+  const onIncludes = pathname.includes(':id-da-receita');
 
   if (onIncludes) return <HomeHeader />;
   // para todos os casos de rota renderiza um header diferente

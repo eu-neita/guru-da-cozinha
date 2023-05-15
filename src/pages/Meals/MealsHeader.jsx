@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router-dom';
 import { useState } from 'react';
-import pofileIcon from '../../images/profileIcon.svg';
+import profileIcon from '../../images/profileIcon.svg';
 import searchIcon from '../../images/searchIcon.svg';
 import SearchBar from '../../components/SearchBar';
 
@@ -12,7 +12,7 @@ function MealsHeader() {
       <h1 data-testid="page-title">Meals</h1>
       <button onClick={ () => history.push('/profile') }>
         <img
-          src={ pofileIcon }
+          src={ profileIcon }
           alt="profile icon"
           data-testid="profile-top-btn"
         />
@@ -28,7 +28,7 @@ function MealsHeader() {
         />
       </button>
 
-      {isSearch && <SearchBar />}
+      {isSearch && <SearchBar type="meals" />}
     </div>
   );
 }
