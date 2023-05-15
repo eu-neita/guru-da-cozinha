@@ -55,8 +55,8 @@ function RecipeInProgress() {
     setCopiedIsTrue(true);
   };
   const handleFavoriteBtn = () => {
-    const mealOrDrink = recipe[0].strMeal !== undefined ? 'meal' : 'drink';
-    const newObj = {
+    const mealOrDrink = recipe[0] && recipe[0].strMeal !== undefined ? 'meal' : 'drink';
+    const newObj = recipe[0] && {
       id: recipe[0].idMeal || recipe[0].idDrink,
       type: mealOrDrink,
       nationality: recipe[0].strArea || '',
@@ -71,7 +71,7 @@ function RecipeInProgress() {
       setHeartIcon(whiteHeartIcon);
     }
     const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
-    if (favoriteRecipes.some((obj) => obj.id === id)) {
+    if (favoriteRecipes.some((obj) => obj && obj.id === id)) {
       const updateFavoriteRecipes = favoriteRecipes.filter((obj) => obj.id !== id);
       localStorage.setItem('favoriteRecipes', JSON.stringify(updateFavoriteRecipes));
     } else {
@@ -81,7 +81,7 @@ function RecipeInProgress() {
   };
   useEffect(() => {
     const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
-    if (favoriteRecipes.some((obj) => obj.id === id)) {
+    if (favoriteRecipes.some((obj) => obj && obj.id === id)) {
       setHeartIcon(blackHeartIcon);
     }
     localStorage.setItem('checkedIngredients', JSON.stringify(checkedIngredients));
@@ -164,7 +164,27 @@ function RecipeInProgress() {
       <button
         data-testid="finish-recipe-btn"
         disabled={ checkedIngredients.length !== Object.keys(ingredientsAll).length }
-        onClick={ () => history.push('/done-recipes') }
+        onClick={ () => {
+          const now = new Date().toISOString();
+          const mealOrDrink = recipe[0] && recipe[0]
+            .strMeal !== undefined ? 'meal' : 'drink';
+          const newObjRecipe = recipe[0] && {
+            id: recipe[0].idMeal || recipe[0].idDrink,
+            type: mealOrDrink,
+            nationality: recipe[0].strArea || '',
+            category: recipe[0].strCategory,
+            alcoholicOrNot: recipe[0].strAlcoholic || '',
+            name: recipe[0].strDrink || recipe[0].strMeal,
+            image: recipe[0].strMealThumb || recipe[0].strDrinkThumb,
+            doneDate: now,
+            tags: recipe[0].strTags !== null ? recipe[0].strTags.split(',') : [],
+          };
+          const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
+          doneRecipes.push(newObjRecipe);
+          localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
+          localStorage.setItem('checkedIngredients', JSON.stringify(''));
+          history.push('/done-recipes');
+        } }
       >
         Finish Recipe
       </button>
