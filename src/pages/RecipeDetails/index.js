@@ -4,6 +4,8 @@ import copy from 'clipboard-copy';
 import './Style.css';
 import shareIcon from '../../images/shareIcon.svg';
 import { recipeFormat } from '../../services/RecipeLocalStorage';
+import blackHeartIcon from '../../images/blackHeartIcon.svg';
+import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 
 export default function RecipeDetails() {
   const { location: { pathname }, push } = useHistory();
@@ -12,7 +14,7 @@ export default function RecipeDetails() {
   const [linkCopied, setLinkCopied] = useState(false);
   const [recipeData, setRecipeData] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
-  const [favoriteRecipes, setFavoriteRecipes] = useState([]);
+  const [heartIcon, setHeartIcon] = useState(whiteHeartIcon);
   const isMeal = pathname.includes('meals');
 
   const vinte = 20;
@@ -68,6 +70,14 @@ export default function RecipeDetails() {
     }
   }, [isMeal, pathname]);
 
+  useEffect(() => {
+    const id = pathname.split('/').pop();
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    if (favoriteRecipes.some((obj) => obj && obj.id === id)) {
+      setHeartIcon(blackHeartIcon);
+    }
+  }, [pathname]);
+
   if (!recipeData) return null;
 
   const recipe = recipeData[0];
@@ -87,34 +97,23 @@ export default function RecipeDetails() {
     push(route);
   };
 
-  const addFavoriteRecipe = (r) => {
-    const newFavoriteRecipes = [...favoriteRecipes, r];
-    setFavoriteRecipes(newFavoriteRecipes);
-    localStorage.setItem('favoriteRecipes', JSON.stringify(newFavoriteRecipes));
-  };
-
-  const removeFavoriteRecipe = (id) => {
-    const newFavoriteRecipes = favoriteRecipes.filter((r) => r.id !== id);
-    setFavoriteRecipes(newFavoriteRecipes);
-    localStorage.setItem('favoriteRecipes', JSON.stringify(newFavoriteRecipes));
-  };
-
-  const isFavoriteRecipe = (id) => favoriteRecipes
-    .some((r) => r.id === id);
-
   const handleFavoriteClick = () => {
     const id = isMeal ? recipe.idMeal : recipe.idDrink;
     const recipeToSaveOnLocalStorage = recipeFormat(recipe, pathname);
-    if (isFavoriteRecipe(id)) {
-      removeFavoriteRecipe(id);
+    if (heartIcon === whiteHeartIcon) {
+      setHeartIcon(blackHeartIcon);
     } else {
-      addFavoriteRecipe(recipeToSaveOnLocalStorage);
+      setHeartIcon(whiteHeartIcon);
+    }
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    if (favoriteRecipes.some((obj) => obj && obj.id === id)) {
+      const updateFavoriteRecipes = favoriteRecipes.filter((obj) => obj.id !== id);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(updateFavoriteRecipes));
+    } else {
+      favoriteRecipes.push(recipeToSaveOnLocalStorage);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
     }
   };
-
-  const localStorageFavoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
-
-  console.log(localStorageFavoriteRecipes);
 
   const shareButton = (
     <button
@@ -138,12 +137,13 @@ export default function RecipeDetails() {
 
   const favoriteButton = (
     <button
-      type="button"
-      data-testid="favorite-btn"
-      className="favorite-btn"
       onClick={ handleFavoriteClick }
     >
-      Favorite
+      <img
+        src={ heartIcon }
+        data-testid="favorite-btn"
+        alt="Favorite"
+      />
     </button>
   );
 
